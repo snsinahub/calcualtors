@@ -32,7 +32,26 @@ class App extends Component {
           <main className="main-content">
             <section className="main-content--two">
               <div className="ma__page-header__content">
-                <h1 className="ma__page-header__title">Mayflower Starter Template</h1>
+                <h1 className="ma__page-header__title">Paid Family Medical Leave Contribution Caculator</h1>
+                <form action="/action_page.php">
+                  <div class="ma__input-group ">
+                    <div class="ma__input-group__title">
+                      Do you have any employees in Massachusetts?
+                      <div class="ma__input-group__items ma__input-group__items--inline">
+                        <div class="ma__input-group__item">
+                          <span class="ma__input-radio">
+                            <input name="ma-employee" type="radio" value="yes" id="ma-employee-yes" />
+                            <label for="ma-employee-yes"><span>Yes</span></label>
+                          </span>
+                          <span class="ma__input-radio">
+                            <input name="ma-employee" type="radio" value="no" id="ma-employee-no" />
+                            <label for="ma-employee-no"><span>No</span></label>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
             </section>
           </main>
