@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Footer } from '@massds/mayflower-react';
+import { Header, Footer, Icon } from '@massds/mayflower-react';
 import UtilityNavData from './data/UtilityNav.data';
 import MainNavData from './data/MainNav.data';
 import HeaderSearchData from './data/HeaderSearch.data';
@@ -55,6 +55,7 @@ class App extends Component {
                           </div>
                         </div>
                       </div>
+                      <Icon name='chevron' />
                       <div class="ma__input-group--inline">
                         <label
                           for="number-input"
