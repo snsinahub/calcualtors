@@ -1,0 +1,7 @@
+.ma__input-group--inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; }
+
+fieldset > * {
+  margin-top: 20px; }

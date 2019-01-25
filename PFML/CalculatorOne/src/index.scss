@@ -1,20 +1,5 @@
 @import "css/global";
 @import "css/layout";
 
-@import "04-templates/form-page";
-@import "01-atoms/forms";
-@import "01-atoms/input-group";
-@import "01-atoms/input-radio";
-
-
-.ma__input-group {
-  &--inline {
-    display: flex;
-      align-items: center;
-      justify-content: space-between;
-  }
-}
-
-fieldset > * {
-  margin-top: 20px;
-}
+// @import "04-templates/form-page";
+// @import "01-atoms/forms";
