@@ -1,9 +1,14 @@
 import React, { Fragment } from 'react';
+import numbro from 'numbro';
 import { InputCurrency, InputRadioGroup, CalloutAlert, InputText } from '@massds/mayflower-react';
 import { FormContext } from './context';
 
 import './index.css';
 
+const toCurrency = (number) => {
+  const currency = numbro(number).formatCurrency({thousandSeparated: true, mantissa: 2, spaceSeparated: false})
+  return currency;
+}
 
 const Part2 = () => {
     return (
@@ -16,8 +21,13 @@ const Part2 = () => {
             }
             const { employees_w2, employees_1099, payroll_w2, payroll_1099, payroll_wages } = context;
             const employeeCount = +employees_w2 + +employees_1099;
-            const over25 = employeeCount > 25;
+            const over25 = employeeCount >= 25;
             const over50per = (employees_1099/employees_w2) > 0.5; 
+            const medPercent = over25 ? 0.0052 : 0.0031;
+            const famPercent = 0.0011;
+            const totalPercent = medPercent + famPercent;
+            const totalPayroll = payroll_w2 + (over50per ? payroll_1099 : 0)
+            const totalPayment = totalPayroll * totalPercent;
             
             return (
               <fieldset>
@@ -81,8 +91,9 @@ const Part2 = () => {
                       </div>
                       {
                         (payroll_w2 &&  payroll_1099) && (
-                          <CalloutAlert theme="c-primary">
-                            <p>Total estimated annual contribution for your company is <strong>{(payroll_w2 + payroll_1099) * 0.0063}</strong> </p>
+                          <CalloutAlert theme="c-primary" icon={null}>
+                            <p>Total estimated annual contribution for your company is <strong>{toCurrency(totalPayment)}</strong> </p>
+                            <p>Of this amount, <strong>{toCurrency(medPercent * totalPayroll)}</strong> is for medical leave and <strong>{toCurrency(famPercent * totalPayroll)}</strong> is for family leave.</p>
                           </CalloutAlert>
                         )
                       }
@@ -110,7 +121,7 @@ const Part2 = () => {
                       />
                     </div>
                     {
-                      (payroll_wages && payroll_wages > 0) && (
+                      (payroll_wages && payroll_wages > 0 && over25) && (
                         <CalloutAlert theme="c-primary" icon={null}>
                           <p>Total estimated annual contribution for this employee is <strong>{payroll_wages * 0.0063}</strong> </p>
                         </CalloutAlert>
