@@ -6,7 +6,7 @@ import './index.css';
 const QuestionTwo = (props) => {
 	const { question, errorMsg } = QuestionTwoProps;
 	return (
-      <div className="ma__form-input--inline">
+      <div className="ma__input-group--inline">
         <InputCurrency 
           labelText={question}
           id="question-2"

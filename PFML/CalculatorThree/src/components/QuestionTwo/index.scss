@@ -1,3 +1,11 @@
 .ma__form-input--inline {
 	display: inline-block;	
 }
+
+.ma__input-group {
+  &--inline {
+    display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+}
