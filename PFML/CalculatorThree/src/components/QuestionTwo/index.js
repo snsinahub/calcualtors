@@ -22,6 +22,7 @@ const QuestionTwo = (props) => {
   		  }}
   		  errorMsg={errorMsg}
   		  onChange={props.onChange}
+        required={true}
   		/>
       </div>
     );
