@@ -44,7 +44,7 @@ const Output = (props) => {
   const { more, less } = paragraphThree;
 
   return (
-      <div>
+      <div className="ma__output">
     	  <p>{paragraphOne.partOne} {<EmpSpan text={toCurrency(estWeeklyBenefit)}/>} {paragraphOne.partTwo} {<EmpSpan text={toPercentage(percentWeeklyIncome)}/>} {paragraphOne.partThree}</p>
         <p>{paragraphTwo.partOne} {<EmpSpan text={toCurrency(totBenefit)}/>}{paragraphTwo.partTwo} {<EmpSpan text={toPercentage(percentIncome)}/>} {paragraphTwo.partThree}</p>
         <CalloutAlert theme="c-primary" icon={{name: "", ariaHidden: true}}>
