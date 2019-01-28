@@ -3,6 +3,7 @@ import { InputCurrency, InputRadioGroup, CalloutAlert, InputText } from '@massds
 import { FormContext } from './context';
 import Part1 from './Part1';
 import Part2 from './Part2';
+import Part3 from './Part3';
 
 import './index.css';
 
@@ -18,7 +19,8 @@ class Form extends Component {
       payroll_base: 'all',
       payroll_w2: null,
       payroll_1099: null,
-      pageroll_wages: null
+      pageroll_wages: null,
+      time_value: 1
     }
   }
   render() {
@@ -29,6 +31,7 @@ class Form extends Component {
           <hr />
           <Part2 />
           <hr />
+          <Part3 />
         </form>
       </FormContext.Provider>
     );

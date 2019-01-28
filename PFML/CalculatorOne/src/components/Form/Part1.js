@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { InputCurrency, InputRadioGroup, CalloutAlert, InputText } from '@massds/mayflower-react';
+import { InputCurrency, InputRadioGroup, CalloutAlert, InputText, Collapse } from '@massds/mayflower-react';
 import { FormContext } from './context';
 
 import './index.css';
@@ -11,10 +11,18 @@ const Part1 = () => {
         {
           (context) => {
             const onChange_employees_w2 = (e) => {
-              context.updateState({ employees_w2: e })
+              context.updateState({ 
+                employees_w2: e,
+                med_leave_cont: (e + context.employees_1099 >= 25) ? 0.6 : 0,
+                fam_leave_cont: 0 
+              })
             }
             const onChange_employees_1099 = (e) => {
-              context.updateState({ employees_1099: e })
+              context.updateState({ 
+                employees_1099: e,
+                med_leave_cont: (e + context.employees_w2 >= 25) ? 0.6 : 0,
+                fam_leave_cont: 0
+              })
             }
             const { has_mass_employees, employees_w2, employees_1099 } = context;
             const over50per = (employees_1099/employees_w2) > 0.5; 
@@ -40,7 +48,7 @@ const Part1 = () => {
             } else if (over50per) {
               message =  (
                 <Fragment>
-                  <p><strong>You are not liable for medical leave payment for your employees.</strong> Because you have more than 25 total employees in Massachusetts.</p>
+                  <p><strong>You are not liable for medical leave payment for your employees.</strong> Because you have less than 25 total employees in Massachusetts.</p>
                   <p><strong>You are not required to remit payment on behalf of your contractors.</strong> Because you have less than 50% of contractors</p>
                 </Fragment>
               )
@@ -67,14 +75,13 @@ const Part1 = () => {
                     }
                   }}
                   />
-                {
-                  !has_mass_employees && (
-                    <CalloutAlert theme="c-error-red">
-                      <p>You are <strong>not required</strong> to remit payment to the department starting 7/1. </p>
-                    </CalloutAlert>
-                  )
-                }
-
+                  <Collapse in={!has_mass_employees} dimension="height" className="ma__callout-alert">
+                    <div className="ma__collapse">
+                      <CalloutAlert theme="c-error-red">
+                        <p>You are <strong>not required</strong> to remit payment to the department starting 7/1. </p>
+                      </CalloutAlert>
+                    </div>
+                  </Collapse>
                 <div class="ma__input-group--inline">
                   <InputText
                     labelText="How many of your MA employees receive W2s?"
@@ -88,6 +95,7 @@ const Part1 = () => {
                     defaultText={context.employees_w2}
                     disabled={!context.has_mass_employees}
                     onChange={onChange_employees_w2}
+                    required={true}
                   />
                 </div>
                 <div class="ma__input-group--inline">
@@ -103,15 +111,16 @@ const Part1 = () => {
                     defaultText={context.employees_1099}
                     disabled={!context.has_mass_employees}
                     onChange={onChange_employees_1099}
+                    required={true}
                   />
                 </div>
-                {
-                  (has_mass_employees && employees_w2 && employees_1099) && (
+                <Collapse in={(has_mass_employees && employees_w2 && employees_1099)} dimension="height" className="ma__callout-alert">
+                  <div className="ma__collapse">
                     <CalloutAlert theme="c-primary">
-                      { message }
+                        { message }
                     </CalloutAlert>
-                  ) 
-                }
+                  </div>
+                </Collapse>
               </fieldset>
             )
           }

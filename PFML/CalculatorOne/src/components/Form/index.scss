@@ -6,6 +6,45 @@
   }
 }
 
+.ma__label--small{
+	font-size: 1em;
+}
+
 fieldset > * {
   margin-top: 20px;
+}
+
+.ma__collapse {
+	margin: 20px 0px;
+
+	p {
+	  margin-bottom: 0rem;
+	}
+
+	 &.collapsed {
+        visibility: hidden;
+        height: 0px;
+      }
+
+      &.collapsing, &.expanding {
+        position: relative;
+        overflow: hidden;
+        visibility: visible;
+        -webkit-transition-property: height, visibility;
+        transition-property: height, visibility;
+        transition-duration: 0.5s;
+        -webkit-transition-duration: 0.5s;
+        transition-timing-function: ease;
+        -webkit-transition-timing-function: ease;
+      }
+
+      &.expanded {
+        height: auto;
+        visibility: visible;
+        display: block;
+      }
+}
+
+.ma__table .ma__td--group {
+	padding-left: 0px !important;
 }
