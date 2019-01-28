@@ -10,11 +10,11 @@ import './index.css';
 
 
 const Output = (props) => {
-  const { maAvgYear, weeksPerYear, maxBenefit, lowBenefitFraction, highBenefitFraction } = CalculatorThreeVariables.baseVariables;
+  const { maAvgYear, weeksPerYear, maxBenefitWeek, lowBenefitFraction, highBenefitFraction } = CalculatorThreeVariables.baseVariables;
   const benefitBreak = maAvgYear * 0.5;
   const benefitBreakWeek = benefitBreak/weeksPerYear * lowBenefitFraction;
+  const maxBenefit = (maxBenefitWeek - benefitBreakWeek) * weeksPerYear * 2 + benefitBreak;
   const maxBenefitDelta = maxBenefit - benefitBreak;
-  const maxBenefitWeek = benefitBreakWeek + (maxBenefitDelta * highBenefitFraction)/weeksPerYear
   const { yearIncome, maxWeeks } = props;
 	
   let estBenefit;
