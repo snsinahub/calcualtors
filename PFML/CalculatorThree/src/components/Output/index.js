@@ -11,12 +11,14 @@ import './index.css';
 
 const Output = (props) => {
   const { maAvgYear, weeksPerYear, maxBenefitWeek, lowBenefitFraction, highBenefitFraction } = CalculatorThreeVariables.baseVariables;
+  const { yearIncome, maxWeeks } = props;
+  const { paragraphOne, paragraphTwo, paragraphThree } = OutputProps;
+  const { more, less } = paragraphThree;
+  
   const benefitBreak = maAvgYear * 0.5;
   const benefitBreakWeek = benefitBreak/weeksPerYear * lowBenefitFraction;
   const maxBenefit = (maxBenefitWeek - benefitBreakWeek) * weeksPerYear * 2 + benefitBreak;
   const maxBenefitDelta = maxBenefit - benefitBreak;
-  const { yearIncome, maxWeeks } = props;
-	
   let estBenefit;
 	if(yearIncome <= benefitBreak) {
 		estBenefit = yearIncome * lowBenefitFraction;
@@ -24,7 +26,6 @@ const Output = (props) => {
 		const addBenefit = ( yearIncome - benefitBreak ) > maxBenefitDelta ? ( maxBenefitDelta * highBenefitFraction ) : (( yearIncome - benefitBreak) * highBenefitFraction );
 		estBenefit = (benefitBreak * lowBenefitFraction) + addBenefit;
 	}
-	
   const estWeeklyBenefit = estBenefit / weeksPerYear;
 	const percentWeeklyIncome = estWeeklyBenefit / ( yearIncome / weeksPerYear );
 	const totBenefit = estWeeklyBenefit * maxWeeks;
@@ -40,8 +41,6 @@ const Output = (props) => {
 		return percent;
 	}
 	
-  const { paragraphOne, paragraphTwo, paragraphThree } = OutputProps;
-  const { more, less } = paragraphThree;
 
   return (
       <div className="ma__output">
@@ -58,9 +57,7 @@ const Output = (props) => {
               <Paragraph text={`${less.partOne} ${toCurrency(benefitBreak)} ${less.partTwo} ${toPercentage(lowBenefitFraction)} ${less.partThree} ${toCurrency(benefitBreakWeek)} ${less.partFour}`} />
               <div className="ma__output-calculation"><Paragraph text={`${toCurrency(estWeeklyBenefit)} = (${toCurrency(yearIncome)} x ${toPercentage(lowBenefitFraction)}) / ${weeksPerYear} weeks per year`} /></div>
             </React.Fragment>
-          )
-            
-          }
+          )}
         </CalloutAlert>
       </div>
   );
