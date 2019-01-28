@@ -51,7 +51,7 @@ const Output = (props) => {
           { yearIncome > benefitBreak ? (
             <React.Fragment>
               <Paragraph text={`${more.partOne} ${toCurrency(benefitBreak)} ${more.partTwo} ${toCurrency(benefitBreakWeek)} ${more.partThree} ${toPercentage(highBenefitFraction)} ${more.partFour} ${toCurrency(benefitBreak)} ${more.partFive} ${toCurrency(maxBenefit)}${more.partSix} ${toCurrency(maxBenefitWeek)} ${more.partSeven}`} />
-              <div className="ma__output-calculation"><Paragraph text={`${toCurrency(estWeeklyBenefit)} = ${toCurrency(benefitBreakWeek)} + [${toPercentage(highBenefitFraction)} x (${toCurrency(yearIncome)} - ${toCurrency(benefitBreak)})] / ${weeksPerYear} weeks per year`} /></div>
+              <div className="ma__output-calculation"><Paragraph text={`${toCurrency(estWeeklyBenefit)} = [${toCurrency(benefitBreakWeek)} + ${toPercentage(highBenefitFraction)} x (${yearIncome > maxBenefit ? toCurrency(maxBenefit) : toCurrency(yearIncome)} - ${toCurrency(benefitBreak)})] / ${weeksPerYear} weeks per year`} /></div>
             </React.Fragment>
           ) : (
             <React.Fragment>
