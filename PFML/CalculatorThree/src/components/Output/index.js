@@ -11,6 +11,7 @@ import './index.css';
 
 const Output = (props) => {
   const { maAvgYear, weeksPerYear, maxBenefitWeek, lowBenefitFraction, highBenefitFraction } = CalculatorThreeVariables.baseVariables;
+  // Inputs from question 1 and 2.
   const { yearIncome, maxWeeks } = props;
   const { paragraphOne, paragraphTwo, paragraphThree } = OutputProps;
   const { more, less } = paragraphThree;
@@ -19,16 +20,25 @@ const Output = (props) => {
   const benefitBreakWeek = benefitBreak/weeksPerYear * lowBenefitFraction;
   const maxBenefit = (maxBenefitWeek - benefitBreakWeek) * weeksPerYear * 2 + benefitBreak;
   const maxBenefitDelta = maxBenefit - benefitBreak;
+
   let estBenefit;
 	if(yearIncome <= benefitBreak) {
+    // If the yearly income is less than half the state wide avg income.
 		estBenefit = yearIncome * lowBenefitFraction;
 	} else {
+    // If yearly income is greater than half the state wide avg income.
 		const addBenefit = ( yearIncome - benefitBreak ) > maxBenefitDelta ? ( maxBenefitDelta * highBenefitFraction ) : (( yearIncome - benefitBreak) * highBenefitFraction );
 		estBenefit = (benefitBreak * lowBenefitFraction) + addBenefit;
 	}
+
+  // The estimated weekly benefit you would receive.
   const estWeeklyBenefit = estBenefit / weeksPerYear;
-	const percentWeeklyIncome = estWeeklyBenefit / ( yearIncome / weeksPerYear );
+  // The estimated total benefit you can receive based on the number of weeks you are covered.
 	const totBenefit = estWeeklyBenefit * maxWeeks;
+
+  // The percent of weekly income the benefit will cover
+  const percentWeeklyIncome = estWeeklyBenefit / ( yearIncome / weeksPerYear );
+  // The percent of your annual income that, based on the max number of week, you can receive.
 	const percentIncome = totBenefit / yearIncome;
 
 	const toCurrency = (number) => {
@@ -41,7 +51,6 @@ const Output = (props) => {
 		return percent;
 	}
 	
-
   return (
       <div className="ma__output">
     	  <p>{paragraphOne.partOne} {<EmpSpan text={toCurrency(estWeeklyBenefit)}/>} {paragraphOne.partTwo} {<EmpSpan text={toPercentage(percentWeeklyIncome)}/>} {paragraphOne.partThree}</p>
