@@ -62,8 +62,8 @@ class App extends Component {
     }
   }
 
-  handleInput = (e) => {
-    const numberValue = e.target.value;
+  handleInput = (e, value) => {
+    const numberValue = value;
     this.setState({
       yearIncome: numberValue
     });
@@ -93,7 +93,7 @@ class App extends Component {
               {yearIncome > 0 && maxWeeks > 0 && (
                 <React.Fragment>
                   <Output yearIncome={yearIncome} maxWeeks={maxWeeks}/>
-                  <Button type="submit" size="small" info="Learn more about filing a claim." text="Learn about how to file a claim" href="https://www.mass.gov" />
+                  <Button type="submit" size="small" info="Learn more about filing a claim." text="Learn about how to file a claim" href="https://www.mass.gov/info-details/paid-family-medical-leave-for-employees-faq" />
                 </React.Fragment>
               )}
             </section>
