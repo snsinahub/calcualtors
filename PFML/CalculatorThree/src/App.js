@@ -111,7 +111,7 @@ class App extends Component {
             <QuestionOne error={false} disabled={false} defaultSelected={leaveReason} onChange={this.handleRadio} />
             <QuestionTwo onChange={this.handleInput} onBlur={this.handleBlur} disabled={questTwoDisabled} defaultValue={yearIncome} belowMinSalary={belowMinSalaryConv} />
             <hr />
-            {yearIncome > 0 && maxWeeks > 0 && !belowMinSalary && (
+            {yearIncome > 0 && maxWeeks > 0 && !belowMinSalaryConv && (
             <React.Fragment>
               <Output yearIncome={yearIncome} maxWeeks={maxWeeks} />
               <Button type="submit" size="small" info="Learn more about filing a claim." text="Learn about how to file a claim" href="https://www.mass.gov/info-details/paid-family-medical-leave-for-employees-faq" />
