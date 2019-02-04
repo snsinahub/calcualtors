@@ -1,134 +1,204 @@
-import React, { Component, Fragment } from 'react';
-import { InputCurrency, InputRadioGroup, CalloutAlert, InputText, Collapse } from '@massds/mayflower-react';
-import { FormContext } from './context';
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { InputRadioGroup, CalloutAlert, InputNumber, Collapse, Paragraph, FormContext } from '@massds/mayflower-react';
+import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
+import CalculatorOneVariables from '../../data/CalculatorOneVariables.json';
+import PartOneProps from '../../data/PartOne.json';
+import { getHelpTip } from '../../utils';
 
-import './index.css';
+import '../../css/index.css';
 
+/**
+ * Manually specify how to deal with changes to URL query param props.
+ * We do this since we are not using a urlPropsQueryConfig.
+ */
+const mapUrlChangeHandlersToProps = () => ({
+  onChangeMassEmp: (value) => replaceInUrlQuery('massEmp', encode(UrlQueryParamTypes.string, value)),
+  onChangeW2: (value) => replaceInUrlQuery('w2', encode(UrlQueryParamTypes.number, value)),
+  onChangeEmp1099: (value) => replaceInUrlQuery('emp1099', encode(UrlQueryParamTypes.number, value))
+});
 
-const Part1 = () => {
-    return (
-      <FormContext.Consumer>
-        {
+const Part1 = (props) => {
+  const {
+    minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
+  } = CalculatorOneVariables.baseVariables;
+  const {
+    questionOne, questionTwo, questionThree, output
+  } = PartOneProps;
+  const { onChangeMassEmp, onChangeW2, onChangeEmp1099 } = props;
+  return(
+    <FormContext.Consumer>
+      {
           (context) => {
-            const onChange_employees_w2 = (e) => {
-              context.updateState({ 
-                employees_w2: e,
-                med_leave_cont: (e + context.employees_1099 >= 25) ? 0.6 : 0,
-                fam_leave_cont: 0 
-              })
-            }
-            const onChange_employees_1099 = (e) => {
-              context.updateState({ 
-                employees_1099: e,
-                med_leave_cont: (e + context.employees_w2 >= 25) ? 0.6 : 0,
-                fam_leave_cont: 0
-              })
-            }
-            const { has_mass_employees, employees_w2, employees_1099 } = context;
-            const over50per = (employees_1099/employees_w2) > 0.5; 
-            const employeeCount = +employees_w2 + (over50per ? +employees_1099 : 0);
-            const over25 = employeeCount >= 25;
-            let message; 
-            if(over25) {
-              if(over50per) {
-                message = (
-                  <Fragment>
-                    <p><strong>You are required to remit payment to the department starting 7/1 and you are liable for a portion of medical leave for your employees.</strong> Because you have more than 25 total employees in Massachusetts. </p>
-                    <p><strong>You are required to remit payment on behalf of your contractors.</strong> For employers with over 50% their workforce made up of 1099s need to consider these as full time employees under the new language.</p>
-                  </Fragment>
-                )
-              } else {
-                message =  (
-                  <Fragment>
-                    <p><strong>You are required to remit payment to the department starting 7/1 and you are liable for a portion of medical leave for your employees.</strong> Because you have more than 25 total employees in Massachusetts. </p>
-                    <p><strong>You are not required to remit payment on behalf of your contractors.</strong> Because you have less than 50% of contractors</p>
-                  </Fragment>
-                )
-              }
-            } else if (over50per) {
-              message =  (
+            const { employeesW2, employees1099 } = context.value;
+            const { hasMassEmployees } = context;
+            const over50per = (Number(employees1099) / (Number(employeesW2) + Number(employees1099))) >= emp1099Fraction;
+            const employeeCount = over50per ? (Number(employeesW2) + Number(employees1099)) : Number(employeesW2);
+            const over25 = employeeCount >= minEmployees;
+            let outputMessage;
+            if (over25 && over50per) {
+              outputMessage = (
                 <Fragment>
-                  <p><strong>You are not liable for medical leave payment for your employees.</strong> Because you have less than 25 total employees in Massachusetts.</p>
-                  <p><strong>You are not required to remit payment on behalf of your contractors.</strong> Because you have less than 50% of contractors</p>
+                  {output.overMinEmpOver1099.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? getHelpTip(message.paragraph, 'c-white', `overMinEmpOver1099-${messageIndex}`) : <Paragraph key={`overMinEmpOver1099-${messageIndex}`} text={message.paragraph.content} />
+                  ))}
                 </Fragment>
-              )
-            } else {
-              message = (<p><strong>You are not required to remit payment to the department starting 7/1.</strong> Because you have less than 25 total employees in Massachusetts. </p>)
+              );
             }
-            return (
+            if (over25 && !over50per && employees1099 && employees1099 > 0) {
+              outputMessage = (
+                <Fragment>
+                  {output.overMinEmpUnder1099.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? getHelpTip(message.paragraph, 'c-white', `overMinEmpUnder1099-${messageIndex}`) : <Paragraph key={`overMinEmpUnder1099-${messageIndex}`} text={message.paragraph.content} />
+                  ))}
+                </Fragment>
+              );
+            }
+            if (over25 && !over50per && (!employees1099 || Number(employees1099) <= 0 || employees1099 === 'NaN')) {
+              outputMessage = (
+                <Fragment>
+                  {output.overMinEmpNo1099.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? getHelpTip(message.paragraph, 'c-white', `overMinEmpNo1099-${messageIndex}`) : <Paragraph key={`overMinEmpNo1099-${messageIndex}`} text={message.paragraph.content} />
+                  ))}
+                </Fragment>
+              );
+            }
+            if (!over25 && over50per) {
+              outputMessage = (
+                <Fragment>
+                  {output.underMinEmpOver1099.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? getHelpTip(message.paragraph, 'c-white', `underMinEmpOver1099-${messageIndex}`) : <Paragraph key={`underMinEmpOver1099-${messageIndex}`} text={message.paragraph.content} />
+                  ))}
+                </Fragment>
+              );
+            }
+            if (!over25 && !over50per && employees1099 && employees1099 > 0) {
+              outputMessage = (
+                <Fragment>
+                  {output.underMinEmpUnder1099.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? getHelpTip(message.paragraph, 'c-white', `underMinEmpUnder1099-${messageIndex}`) : <Paragraph key={`underMinEmpUnder1099-${messageIndex}`} text={message.paragraph.content} />
+                  ))}
+                </Fragment>
+              );
+            }
+            if (!over25 && !over50per && (Number(employees1099) <= 0 || !employees1099 || employees1099 === 'NaN')) {
+              outputMessage = (
+                <Fragment>
+                  {output.underMinEmpNo1099.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? getHelpTip(message.paragraph, 'c-white', `underMinEmpNo1099-${messageIndex}`) : <Paragraph key={`underMinEmpNo1099-${messageIndex}`} text={message.paragraph.content} />
+                  ))}
+                </Fragment>
+              );
+            }
+            return(
               <fieldset>
                 <InputRadioGroup
-                  title="Do you have any employees in Massachusetts?"
+                  title={questionOne.question.helpText ? getHelpTip(questionOne.question) : questionOne.question.content}
                   name="mass_employees"
                   outline
-                  defaultSelected="yes"
-                  errorMsg="You must selected your favorite plant."
-                  radioButtons={[
-                    {id: 'yes',value: 'yes',label: 'Yes'},
-                    {id: 'no',value: 'no',label: 'No'}
-                  ]}
+                  defaultSelected={hasMassEmployees ? 'yes' : 'no'}
+                  errorMsg={questionOne.errorMsg}
+                  radioButtons={questionOne.options}
                   onChange={(e) => {
-                    if(e.selected === 'yes') {
-                      context.updateState({ has_mass_employees: true })
-                    } else {
-                      context.updateState({ has_mass_employees: false })
-                    }
+                    const hasEmp = e.selected === 'yes';
+                    context.updateState({
+                      hasMassEmployees: hasEmp
+                    });
+                    onChangeMassEmp(e.selected);
                   }}
-                  />
-                  <Collapse in={!has_mass_employees} dimension="height" className="ma__callout-alert">
-                    <div className="ma__collapse">
-                      <CalloutAlert theme="c-error-red">
-                        <p>You are <strong>not required</strong> to remit payment to the department starting 7/1. </p>
-                      </CalloutAlert>
-                    </div>
-                  </Collapse>
-                <div class="ma__input-group--inline">
-                  <InputText
-                    labelText="How many of your MA employees receive W2s?"
-                    id="employees_w2"
-                    name="employees_w2"
-                    type="number"
-                    width={0}
-                    maxlength={0}
-                    placeholder="type something"
-                    errorMsg="you did not type something"
-                    defaultText={context.employees_w2}
-                    disabled={!context.has_mass_employees}
-                    onChange={onChange_employees_w2}
-                    required={true}
-                  />
-                </div>
-                <div class="ma__input-group--inline">
-                  <InputText
-                    labelText="How many 1099 contractors have you hired in the past year?"
-                    name="employees_1099"
-                    id="employees_1099"
-                    type="number"
-                    width={0}
-                    maxlength={0}
-                    placeholder="type something"
-                    errorMsg="you did not type something"
-                    defaultText={context.employees_1099}
-                    disabled={!context.has_mass_employees}
-                    onChange={onChange_employees_1099}
-                    required={true}
-                  />
-                </div>
-                <Collapse in={(has_mass_employees && employees_w2 && employees_1099)} dimension="height" className="ma__callout-alert">
+                />
+                <Collapse in={!hasMassEmployees} dimension="height" className="ma__callout-alert">
+                  <div className="ma__collapse">
+                    <CalloutAlert theme={questionOne.options[1].theme}>
+                      <Paragraph text={questionOne.options[1].message} />
+                    </CalloutAlert>
+                  </div>
+                </Collapse>
+                <InputNumber
+                  labelText={questionTwo.question.helpText ? getHelpTip(questionTwo.question) : questionTwo.question.content}
+                  id="employeesW2"
+                  name="employeesW2"
+                  type="number"
+                  width={0}
+                  inline
+                  maxlength={0}
+                  placeholder="e.g. 50"
+                  errorMsg={questionTwo.errorMsg}
+                  defaultValue={Number(employeesW2)}
+                  disabled={!context.hasMassEmployees}
+                  required
+                  unit=""
+                  onChange={(e, inputValue) => {
+                    const empW2 = Number(inputValue);
+                    const value = { ...context.value };
+                    value.payrollBase = 'all';
+                    value.employeesW2 = empW2;
+                    const empCount = empW2 + (context.value.employees1099 / (context.value.employees1099 + empW2) >= emp1099Fraction ? context.value.employees1099 : 0);
+                    // Use updateState for updating many form values, otherwise use setValue for a single form id.
+                    onChangeW2(empW2);
+                    context.updateState({
+                      value,
+                      medLeaveCont: (empCount >= minEmployees) ? largeCompMedCont : smallCompMedCont,
+                      famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont
+                    });
+                  }}
+                  showButtons
+                />
+                <InputNumber
+                  labelText={questionThree.question.helpText ? getHelpTip(questionThree.question) : questionThree.question.content}
+                  name="employees1099"
+                  id="employees1099"
+                  type="number"
+                  width={0}
+                  maxlength={0}
+                  placeholder="e.g. 50"
+                  inline
+                  errorMsg={questionThree.errorMsg}
+                  defaultValue={Number(context.value.employees1099)}
+                  disabled={!context.hasMassEmployees}
+                  required
+                  onChange={(e, inputValue) => {
+                    const emp1099 = Number(inputValue);
+                    // Pull value from form for updating.
+                    const value = { ...context.value };
+                    value.employees1099 = emp1099;
+                    const empCount = context.value.employeesW2 + (emp1099 / (emp1099 + context.value.employeesW2) >= emp1099Fraction ? emp1099 : 0);
+                    context.updateState({
+                      value,
+                      medLeaveCont: (empCount >= minEmployees) ? largeCompMedCont : smallCompMedCont,
+                      famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont
+                    });
+                    onChangeEmp1099(emp1099);
+                  }}
+                  showButtons
+                />
+                <Collapse in={hasMassEmployees && employeesW2 > 0} dimension="height" className="ma__callout-alert">
                   <div className="ma__collapse">
                     <CalloutAlert theme="c-primary">
-                        { message }
+                      { outputMessage }
                     </CalloutAlert>
                   </div>
                 </Collapse>
               </fieldset>
-            )
+            );
           }
-          
+
         }
-      </FormContext.Consumer>
-    ); 
-}
+    </FormContext.Consumer>
+  );
+};
 
+Part1.propTypes = {
+  /** Functions that push changed context props to the url. */
+  onChangeMassEmp: PropTypes.func,
+  onChangeW2: PropTypes.func,
+  onChangeEmp1099: PropTypes.func
+};
 
-export default Part1;
+export default addUrlProps({ mapUrlChangeHandlersToProps })(Part1);

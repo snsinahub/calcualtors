@@ -1,0 +1,119 @@
+{
+    "questionOne": {
+        "question": {
+            "helpText": "A MA employee is anyone who works for a business or a state or federal government agency that is located in the Commonwealth.",
+            "triggerText": "Massachusetts employees",
+            "content": "Do you have Massachusetts employees?"
+        },
+        "errorMsg": "Please select yes or no.",
+        "options": [{
+            "label": "Yes",
+            "value": "yes",
+            "id": "yes",
+            "message": "",
+            "theme": "c-primary"
+        }, {
+            "label": "No",
+            "value": "no",
+            "id": "no",
+            "message": "You are <strong>not required</strong> to remit payment to the department starting 7/1.",
+            "theme": "c-error-red"
+        }]
+    },
+    "questionTwo": {
+        "question": {
+            "content": "How many of your MA employees receive W2s?"
+        },
+        "errorMsg": "Please enter a value."
+    },
+    "questionThree": {
+        "question": {
+            "content": "How many contractors (1099-MISCs) have you hired in the past year?"
+        },
+        "errorMsg": "Please enter a value."
+    },
+    "output": {
+        "overMinEmpOver1099": [{
+            "paragraph": {
+                "content": "You are required to send the employee share of the contribution on behalf of your <strong>employees</strong> and <strong>contractors</strong> to the department starting <strong>July 1, 2019</strong>.",
+                "triggerText": "<strong>contractors</strong>",
+                "helpText": "Employers that contract more than half of their workforce using IRS Form 1099-MISC are required to consider these individuals as full time employees."
+            }
+        }, {
+            "paragraph": {
+                "content": "You are also <strong>required to pay the employer share</strong> of the contribution for medical leave.",
+                "triggerText": "<strong>required to pay the employer share</strong>",
+                "helpText": "If you have 25 or more workers, you need to pay the employer share"
+            }
+        }],
+        "overMinEmpUnder1099": [{
+            "paragraph": {
+                "content": "You are <strong>required</strong> to send the employee share of the contribution on behalf of your employees (W2s) to the department <strong>starting July 1, 2019</strong>."
+            }
+        }, {
+            "paragraph": {
+                "content": "You are also <strong>required to pay the employer share</strong> of the contribution for medical leave.",
+                "triggerText": "<strong>required to pay the employer share</strong>",
+                "helpText": "If you have 25 or more workers, you need to pay the employer share."
+            }
+        }, {
+            "paragraph": {
+                "content": "You are not required to contribute on behalf of your contractors.",
+                "triggerText": "not required to contribute",
+                "helpText": "Employers that contract more than half of their workforce using IRS Form 1099-MISC are required to consider these individuals as full time employees."
+            }
+        }],
+        "underMinEmpOver1099": [{
+            "paragraph": {
+                "content": "You are required to send the employee share of the contribution on behalf of your <strong>employees</strong> and <strong>contractors</strong> to the department starting July 1, 2019.",
+                "triggerText": "<strong>contractors</strong>",
+                "helpText": "Employers that contract more than half of their workforce using IRS Form 1099-MISC are required to consider these individuals as full time employees."
+            }
+        }, {
+            "paragraph": {
+                "content": "You are not required to pay the employer share of the contribution for family and medical leave.",
+                "triggerText": "not required to pay the employer share",
+                "helpText": "If you have less than 25 workers, you do not need to pay the employer share."
+            }
+        }],
+        "underMinEmpUnder1099": [{
+            "paragraph": {
+                "content": "You are required to send the employee (W2s) share of the contribution <strong>starting July 1, 2019.</strong>"
+            }
+        }, {
+            "paragraph": {
+                "content": "You are <strong>not required</strong> to pay the employer share of the contribution for family and medical leave.",
+                "triggerText": "<strong>not required</strong> to pay the employer share",
+                "helpText": "If you have less than 25 workers, you do not need to pay the employer share"
+            }
+        }, {
+            "paragraph": {
+                "content": "You are <strong>not required</strong> to contribute on behalf of your contractors.",
+                "triggerText": "<strong>not required</strong> to contribute",
+                "helpText": "Employers that contract more than half of their workforce using IRS Form 1099-MISC are required to consider these individuals as full time employees."
+            } 
+        }],
+        "underMinEmpNo1099": [{
+            "paragraph": {
+                "content": "You are <strong>required</strong> to send the employee share of the contribution <strong>starting July 1, 2019</strong>."
+            }
+        }, {
+            "paragraph": {
+                "content": "You are <strong>not required to pay the employer share</strong> of the contribution for family and medical leave.",
+                "triggerText": "<strong>not required to pay the employer share</strong>",
+                "helpText": "If you have less than 25 employees, you do not need to pay the employer share."
+            }
+        }],
+        "overMinEmpNo1099": [{
+            "paragraph": {
+                "content": "You are <strong>required</strong> to send the employee share of the contribution <strong>starting July 1, 2019</strong>."
+            }
+        }, {
+            "paragraph": {
+                "content": "You are also <strong>required to pay the employer share</strong> of the contribution for medical leave.",
+                "triggerText": "<strong>required to pay the employer share</strong>",
+                "helpText": "If you have 25 or more employees, you need to pay the employer share."
+            }
+        }]
+    }
+}

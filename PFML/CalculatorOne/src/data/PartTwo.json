@@ -1,0 +1,27 @@
+{
+    "questionOne": {
+        "question": "Which option are you calculating your contribution based upon?",
+        "errorMsg": "Please select an option.",
+        "options": [{
+            "id": "payroll_base_all",
+            "value": "all",
+            "label": "All Employees"
+        }, {
+            "id:": "payroll_base_one",
+            "value": "one",
+            "label": "Individual Employee"
+        }]
+    },
+    "questionTwo": {
+        "question": "What was your total payroll for W2 Employees last year?",
+        "errorMsg": "Please enter a value."
+    },
+    "questionThree": {
+        "question": "How much did you pay your contractors (1099-MISCs) last year?",
+        "errorMsg": "Please enter a value."
+    },
+    "questionFour": {
+        "question": "What was the employee’s gross wages last year?",
+        "errorMsg": "Please enter a value."
+    }
+}

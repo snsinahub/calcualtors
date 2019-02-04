@@ -5,7 +5,8 @@ import MainNavData from './data/MainNav.data';
 import HeaderSearchData from './data/HeaderSearch.data';
 import FooterLinksLiveData from './data/FooterLinksLive.json';
 import SocialLinksLiveData from './data/SocialLinksLive.json';
-import Form from './components/Form';
+import ExampleForm from './components/ExampleForm';
+import history from './components/History';
 
 import './index.css';
 
@@ -26,20 +27,22 @@ class App extends Component {
       siteLogoDomain: { url: { domain: 'https://www.mass.gov/' } }
     };
   }
+  componentDidMount() {
+    // force an update if the URL changes
+    history.listen(() => this.forceUpdate());
+  }
   render() {
-    return (
+    return(
       <div className="App">
         <Header {...this.headerProps} />
-          <main className="main-content">
-            <section className="main-content--two">
-              <div className="ma__page-header__content">
-                <h1 className="ma__page-header__title">Paid Family Medical Leave Contribution Caculator</h1>
-                <div className="page-content">
-                  <Form />
-                </div>
-              </div>
-            </section>
-          </main>
+        <main className="main-content">
+          <section className="main-content main-content--two">
+            <div className="ma__page-header__content">
+              <h1 className="ma__page-header__title">Paid Family Medical Leave Contribution Caculator</h1>
+              <ExampleForm />
+            </div>
+          </section>
+        </main>
         <Footer {...this.footerProps} />
       </div>
     );
