@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import numbro from 'numbro';
 import { CalloutAlert, HelpTip, Paragraph } from '@massds/mayflower-react';
 import { toCurrency, toPercentage } from '../../util';
 
@@ -10,7 +11,10 @@ const Output = (props) => {
     quarter1, quarter2, quarter3, quarter4
   } = props;
 
-  const quartersHaveValue = [quarter1, quarter2, quarter3, quarter4].filter((q) => typeof q === 'number' && q > 0);
+  let quartersArray = [quarter1, quarter2, quarter3, quarter4];
+  quartersArray = quartersArray.map((q) => ((typeof q === 'string') ? numbro.unformat(q) : q));
+
+  const quartersHaveValue = quartersArray.filter((q) => typeof q === 'number' && q > 0);
   const quartersCount = quartersHaveValue.length;
 
   // qualification
@@ -61,8 +65,8 @@ const Output = (props) => {
           <HelpTip
             theme="c-white"
             textBefore="You would be eligible to receive "
-            triggerText={`<span>${toCurrency(weeklyBenefitFinal)} for ${parseInt(benefitDuration, 10)} weeks</span>`}
-            textAfter={`, based on your maximum benefit credit of ${toCurrency(maxBenefitFinal)}.`}
+            triggerText={`<strong>${toCurrency(weeklyBenefitFinal)} for ${parseInt(benefitDuration, 10)} weeks</strong>`}
+            textAfter={`, based on your maximum benefit credit of <strong>${toCurrency(maxBenefitFinal)}</strong>.`}
             id="help-tip-benefits"
             labelID="help-tip-benefits-label"
           >
@@ -79,9 +83,9 @@ const Output = (props) => {
             id="help-tip-benefits"
             labelID="help-tip-benefits-label"
           >
-          <div className="ma__help-text">
-            <Paragraph text={`You must have earned at least ${toCurrency(quartersSumThreshhold)} during the last 4 completed calendar quarters to be eligible`} />
-          </div>
+            <div className="ma__help-text">
+              <Paragraph text={`You must have earned at least ${toCurrency(quartersSumThreshhold)} during the last 4 completed calendar quarters to be eligible`} />
+            </div>
           </HelpTip>
         </CalloutAlert>
       )
