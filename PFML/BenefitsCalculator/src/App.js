@@ -10,7 +10,7 @@ import Part1 from './components/Part1';
 import Part2 from './components/Part2';
 import Part3 from './components/Part3';
 import history from './components/History';
-import CalculatorThreeVariables from './data/CalculatorThreeVariables.json';
+import BenefitsVariables from './data/BenefitsVariables.json';
 
 import './index.css';
 
@@ -48,7 +48,7 @@ class App extends Component {
       yearIncome: getDefaultNumber(yearIncome),
       maxWeeks: null,
       leaveReason,
-      belowMinSalary: getDefaultNumber(yearIncome) < CalculatorThreeVariables.baseVariables.minSalary || false
+      belowMinSalary: getDefaultNumber(yearIncome) < BenefitsVariables.baseVariables.minSalary || false
     };
     /* eslint-enable react/no-unused-state */
     this.footerProps = {
@@ -81,7 +81,7 @@ class App extends Component {
       yearIncome: numberValue
     });
     this.props.onChangeYearIncome(value);
-    if (numberValue > CalculatorThreeVariables.baseVariables.minSalary) {
+    if (numberValue > BenefitsVariables.baseVariables.minSalary) {
       this.setState({
         belowMinSalary: false
       });
@@ -97,7 +97,7 @@ class App extends Component {
   }
 
   handleBlur = (numberValue) => {
-    if (numberValue < CalculatorThreeVariables.baseVariables.minSalary) {
+    if (numberValue < BenefitsVariables.baseVariables.minSalary) {
       this.setState({
         belowMinSalary: true
       });
@@ -118,7 +118,7 @@ class App extends Component {
       <div className="App">
         <Header {...this.headerProps} />
         <main className="main-content">
-          <PageHeader title={CalculatorThreeVariables.title} optionalContents={[{ paragraph: { text: CalculatorThreeVariables.description } }]} />
+          <PageHeader title={BenefitsVariables.title} optionalContents={[{ paragraph: { text: BenefitsVariables.description } }]} />
           <section className="main-content--two">
             <Part1 error={false} disabled={false} defaultSelected={leaveReason} onChange={this.handleRadio} />
             <hr />

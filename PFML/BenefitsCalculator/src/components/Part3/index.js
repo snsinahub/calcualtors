@@ -4,7 +4,7 @@ import {
   Paragraph, CalloutAlert, HelpTip, Button
 } from '@massds/mayflower-react';
 import numbro from 'numbro';
-import CalculatorThreeVariables from '../../data/CalculatorThreeVariables.json';
+import BenefitsVariables from '../../data/BenefitsVariables.json';
 import PartThreeProps from '../../data/PartThree.json';
 import EmpSpan from '../EmpSpan';
 
@@ -15,7 +15,7 @@ const Part3 = (props) => {
   // Base variables provided in the base variable json.
   const {
     maAvgYear, weeksPerYear, maxBenefitWeek, lowBenefitFraction, highBenefitFraction
-  } = CalculatorThreeVariables.baseVariables;
+  } = BenefitsVariables.baseVariables;
   // Inputs from question 1 and 2.
   const { yearIncome, maxWeeks } = props;
   const {
