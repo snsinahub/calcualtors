@@ -118,7 +118,7 @@ class App extends Component {
       <div className="App">
         <Header {...this.headerProps} />
         <main className="main-content">
-          <PageHeader title={CalculatorThreeVariables.title} subTitle={CalculatorThreeVariables.subTitle} />
+          <PageHeader title={CalculatorThreeVariables.title} optionalContents={[{ paragraph: { text: CalculatorThreeVariables.description } }]} />
           <section className="main-content--two">
             <Part1 error={false} disabled={false} defaultSelected={leaveReason} onChange={this.handleRadio} />
             <hr />
