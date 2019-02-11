@@ -48,4 +48,4 @@ The most common commands can be found in the package.json's ``scripts`` section:
 - The code merging parts 1-3 together and providing the context is [ExampleForm](.src/component/ExampleForm)
 
 ### Base Variables
-- The [Base Variables](./src/data/CalculatorOneVariables.json) that power the logic behind the calculators messaging and calculations are located in the base variables json.
+- The [Base Variables](./src/data/ContributionVariables.json) that power the logic behind the calculators messaging and calculations are located in the base variables json.

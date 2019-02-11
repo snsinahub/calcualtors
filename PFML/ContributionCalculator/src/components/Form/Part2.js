@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import numbro from 'numbro';
 import { InputCurrency, InputRadioGroup, CalloutAlert, Collapse, HelpTip, FormContext, Paragraph } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
-import CalculatorOneVariables from '../../data/CalculatorOneVariables.json';
+import ContributionVariables from '../../data/ContributionVariables.json';
 import PartTwoProps from '../../data/PartTwo.json';
 import { toCurrency, toPercentage } from '../../utils';
 
@@ -23,7 +23,7 @@ const mapUrlChangeHandlersToProps = () => ({
 const Part2 = (props) => {
   const {
     minEmployees, emp1099Fraction, smallMedPercent, smallFamPercent, largeMedPercent, largeFamPercent, socialSecCap
-  } = CalculatorOneVariables.baseVariables;
+  } = ContributionVariables.baseVariables;
   const {
     questionOne, questionTwo, questionThree, questionFour
   } = PartTwoProps;

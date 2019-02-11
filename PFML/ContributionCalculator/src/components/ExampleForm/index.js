@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { decode, addUrlProps, UrlQueryParamTypes } from 'react-url-query';
 import { FormContext } from '@massds/mayflower-react';
-import CalculatorOneVariables from '../../data/CalculatorOneVariables.json';
+import ContributionVariables from '../../data/ContributionVariables.json';
 import Part1 from '../Form/Part1';
 import Part2 from '../Form/Part2';
 import Part3 from '../Form/Part3';
@@ -29,7 +29,7 @@ const mapUrlToProps = (url) => ({
 
 const {
   minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
-} = CalculatorOneVariables.baseVariables;
+} = ContributionVariables.baseVariables;
 
 class ExampleForm extends Component {
   constructor(props) {

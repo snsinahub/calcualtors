@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { InputRadioGroup, CalloutAlert, InputNumber, Collapse, Paragraph, FormContext } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
-import CalculatorOneVariables from '../../data/CalculatorOneVariables.json';
+import ContributionVariables from '../../data/ContributionVariables.json';
 import PartOneProps from '../../data/PartOne.json';
 import { getHelpTip } from '../../utils';
 
@@ -21,7 +21,7 @@ const mapUrlChangeHandlersToProps = () => ({
 const Part1 = (props) => {
   const {
     minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
-  } = CalculatorOneVariables.baseVariables;
+  } = ContributionVariables.baseVariables;
   const {
     questionOne, questionTwo, questionThree, output
   } = PartOneProps;

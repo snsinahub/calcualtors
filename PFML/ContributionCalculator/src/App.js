@@ -7,7 +7,7 @@ import FooterLinksLiveData from './data/FooterLinksLive.json';
 import SocialLinksLiveData from './data/SocialLinksLive.json';
 import ExampleForm from './components/ExampleForm';
 import history from './components/History';
-import CalculatorOneVariables from './data/CalculatorOneVariables.json';
+import ContributionVariables from './data/ContributionVariables.json';
 
 import './index.css';
 
@@ -38,8 +38,8 @@ class App extends Component {
         <Header {...this.headerProps} />
         <main className="main-content">
           <PageHeader
-            title={CalculatorOneVariables.title}
-            optionalContents={[{ paragraph: { text: CalculatorOneVariables.description } }]}
+            title={ContributionVariables.title}
+            optionalContents={[{ paragraph: { text: ContributionVariables.description } }]}
           />
           <section className="main-content main-content--two">
             <ExampleForm />

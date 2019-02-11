@@ -45,4 +45,4 @@ The most common commands can be found in the package.json's ``scripts`` section:
 <img src="./documentation/images/Part3-02052019.png" width="500">
 
 ### Base Variables
-- The [Base Variables](./src/data/CalculatorThreeVariables.json) that power the logic behind the calculators messaging and calculations are located in the base variables json.
+- The [Base Variables](./src/data/BenefitsVariables.json) that power the logic behind the calculators messaging and calculations are located in the base variables json.

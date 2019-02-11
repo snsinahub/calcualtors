@@ -4,7 +4,7 @@ import numbro from 'numbro';
 import { SelectBox, Input, InputSlider, InputNumber, FormContext } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
 import { toCurrency, getHelpTip } from '../../utils';
-import CalculatorOneVariables from '../../data/CalculatorOneVariables.json';
+import ContributionVariables from '../../data/ContributionVariables.json';
 import PartThreeProps from '../../data/PartThree.json';
 
 import '../../css/index.css';
@@ -23,7 +23,7 @@ const mapUrlChangeHandlersToProps = () => ({
 const Part3 = (props) => {
   const {
     minEmployees, emp1099Fraction, smallMedPercent, smallFamPercent, largeMedPercent, largeFamPercent, largeCompFamCont, smallCompFamCont, largeCompMedCont, smallCompMedCont, socialSecCap
-  } = CalculatorOneVariables.baseVariables;
+  } = ContributionVariables.baseVariables;
   const { questionOne, questionTwo } = PartThreeProps;
   const {
     onChangeMedCont, onChangeFamCont, onChangeTimeValue, onChangeTimePeriod
