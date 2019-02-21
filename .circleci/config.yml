@@ -87,6 +87,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "PFML/BenefitsCalculator/package.json" }}
       - *install_aws
+      - *install_global_packages
       - run:
           name: 'PFML Benefits Calculator Install Packages'
           command: cd PFML/BenefitsCalculator && npm install
@@ -108,6 +109,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "PFML/ContributionCalculator/package.json" }}
       - *install_aws
+      - *install_global_packages
       - run:
           name: 'PFML Contribution Calculator Install Packages'
           command: cd PFML/ContributionCalculator && npm install
@@ -129,6 +131,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "UI/BenefitsCalculator/package.json" }}
       - *install_aws
+      - *install_global_packages
       - run:
           name: 'UI Benefits Calculator Install Packages'
           command: cd UI/BenefitsCalculator/ && npm install
@@ -150,6 +153,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "UI/PartTimeBenefitsCalculator/package.json" }}
       - *install_aws
+      - *install_global_packages
       - run:
           name: 'UI Part Time Benefits Calculator Install Packages'
           command: cd UI/PartTimeBenefitsCalculator && npm install
@@ -172,6 +176,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "PFML/BenefitsCalculator/package.json" }}
       - *install_aws
+      - *install_global_packages
       - run:
           name: 'PFML Benefits Calculator Install Packages'
           command: cd PFML/BenefitsCalculator && npm install
@@ -193,6 +198,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "PFML/ContributionCalculator/package.json" }}
       - *install_aws
+      - *install_global_packages
       - run:
           name: 'PFML Contribution Calculator Install Packages'
           command: cd PFML/ContributionCalculator && npm install
@@ -211,10 +217,18 @@ workflows:
   version: 2
   test:
     jobs:
-      - pfml-cal-benefits-test
-      - pfml-cal-contribution-test
-      - ui-cal-benefits-test
-      - ui-cal-part-time-benefits-test
+      - pfml-cal-benefits-test:
+          filters:
+            branches: { only: /(pfml-benefits\/|all\/).*/ }
+      - pfml-cal-contribution-test:
+          filters:
+            branches: { only: /(pfml-contribution\/|all\/).*/ }
+      - ui-cal-benefits-test:
+          filters:
+            branches: { only: /(ui-benefits\/|all\/).*/ }
+      - ui-cal-part-time-benefits-test:
+          filters:
+            branches: { only: /(ui-part-time\/|all\/).*/ }
   deploy-dev:
     jobs:
       - pfml-cal-benefits-deploy-dev:
