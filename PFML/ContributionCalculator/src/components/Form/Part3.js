@@ -273,7 +273,7 @@ const Part3 = (props) => {
                         required
                         id="color-select"
                         options={questionTwo.options}
-                        selected={timePeriod || 'Year'}
+                        selected={timePeriod || 'Quarter'}
                         onChangeCallback={({ selected }) => {
                           const value = getTimeValue(selected);
                           context.updateState({
