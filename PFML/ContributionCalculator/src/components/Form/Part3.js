@@ -178,7 +178,7 @@ const Part3 = (props) => {
                               id="famEmployerCont"
                               type="number"
                               width={0}
-                              maxlength={0}
+                              maxlength={3}
                               placeholder="e.g. 50"
                               inline={false}
                               defaultValue={Math.round(famLeaveCont * 100)}
@@ -200,7 +200,7 @@ const Part3 = (props) => {
                               id="famEmployeeCont"
                               type="number"
                               width={0}
-                              maxlength={0}
+                              maxlength={3}
                               placeholder="e.g. 50"
                               inline={false}
                               step={1}
@@ -273,7 +273,7 @@ const Part3 = (props) => {
                         required
                         id="color-select"
                         options={questionTwo.options}
-                        selected={timePeriod || 'Year'}
+                        selected={timePeriod || 'Quarter'}
                         onChangeCallback={({ selected }) => {
                           const value = getTimeValue(selected);
                           context.updateState({

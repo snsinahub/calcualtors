@@ -43,7 +43,7 @@ class ExampleForm extends Component {
     const famLeaveCont = (employeeCount >= minEmployees) ? largeCompFamCont : smallCompFamCont;
     const validNumber = (num) => (num || (num !== null && num !== undefined));
     const getDefaultCurrency = (num) => ((validNumber(num)) ? Number(num) : '0');
-    const getDefaultNumber = (num) => ((validNumber(num)) ? Number(num) : 0);
+    const getDefaultNumber = (num) => ((validNumber(num)) ? Number(num) : null);
     /* eslint-disable react/no-unused-state */
     this.state = {
       isActive: true,
@@ -57,7 +57,7 @@ class ExampleForm extends Component {
       },
       setValue: this.setValue,
       timeValue: validNumber(timeValue) ? Number(timeValue) : 4,
-      timePeriod: (timePeriod && timePeriod.length > 0) ? timePeriod : 'Year',
+      timePeriod: (timePeriod && timePeriod.length > 0) ? timePeriod : 'Quarter',
       famLeaveCont: validNumber(famCont) ? famCont : famLeaveCont,
       medLeaveCont: validNumber(medCont) ? medCont : medLeaveCont,
       payrollBase: (option && option.length > 0) ? option : 'all',
