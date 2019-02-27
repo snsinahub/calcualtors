@@ -6,6 +6,7 @@ import ContributionVariables from '../../data/ContributionVariables.json';
 import Part1 from '../Form/Part1';
 import Part2 from '../Form/Part2';
 import Part3 from '../Form/Part3';
+import Reset from '../Form/Reset';
 
 import '../../css/index.css';
 
@@ -39,10 +40,11 @@ class ExampleForm extends Component {
     } = this.props;
     const over50per = (Number(emp1099) / (Number(w2) + Number(emp1099))) >= emp1099Fraction;
     const employeeCount = over50per ? (Number(w2) + Number(emp1099)) : Number(w2);
+    const over25 = employeeCount >= minEmployees;
     const medLeaveCont = (employeeCount >= minEmployees) ? largeCompMedCont : smallCompMedCont;
     const famLeaveCont = (employeeCount >= minEmployees) ? largeCompFamCont : smallCompFamCont;
     const validNumber = (num) => (num || (num !== null && num !== undefined));
-    const getDefaultCurrency = (num) => ((validNumber(num)) ? Number(num) : '0');
+    const getDefaultCurrency = (num) => ((validNumber(num)) ? Number(num) : null);
     const getDefaultNumber = (num) => ((validNumber(num)) ? Number(num) : null);
     /* eslint-disable react/no-unused-state */
     this.state = {
@@ -62,7 +64,10 @@ class ExampleForm extends Component {
       medLeaveCont: validNumber(medCont) ? medCont : medLeaveCont,
       payrollBase: (option && option.length > 0) ? option : 'all',
       hasMassEmployees: massEmp ? (massEmp === 'yes') : true,
-      updateState: this.updateState
+      updateState: this.updateState,
+      over25,
+      over50per,
+      employeeCount
     };
     /* eslint-enable react/no-unused-state */
   }
@@ -74,7 +79,7 @@ class ExampleForm extends Component {
   updateState = (newState) => { this.setState(newState); };
   render() {
     return(
-      <form className="ma__form-page" action="#">
+      <form className="ma__form-page">
         <FormContext.Provider value={this.state}>
           <div className="page-content">
             <Part1 />
@@ -83,6 +88,7 @@ class ExampleForm extends Component {
           </div>
           <hr />
           <Part3 />
+          <Reset />
         </FormContext.Provider>
       </form>
     );
