@@ -104,6 +104,26 @@ const Part1 = (props) => {
                 </Fragment>
               );
             }
+            if (!over25 && over50per && Number(employees1099) > 0 && !(Number(employeesW2) > 0)) {
+              outputMessage = (
+                <Fragment>
+                  {output.underMinEmpNoW2.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? <p className="ma__help-tip-many">{getHelpTip(message.paragraph, 'c-white', `underMinEmpNo1099-${messageIndex}`)}</p> : getDangerousParagraph(message.paragraph.content, `underMinEmpNo1099-${messageIndex}`)
+                  ))}
+                </Fragment>
+              );
+            }
+            if (over25 && over50per && Number(employees1099) > 0 && !(Number(employeesW2) > 0)) {
+              outputMessage = (
+                <Fragment>
+                  {output.overMinEmpNoW2.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? <p className="ma__help-tip-many">{getHelpTip(message.paragraph, 'c-white', `underMinEmpNo1099-${messageIndex}`)}</p> : getDangerousParagraph(message.paragraph.content, `underMinEmpNo1099-${messageIndex}`)
+                  ))}
+                </Fragment>
+              );
+            }
             return(
               <fieldset>
                 <InputRadioGroup
@@ -144,7 +164,7 @@ const Part1 = (props) => {
                   required
                   unit=""
                   onChange={(e, inputValue) => {
-                    const empW2 = Number(inputValue);
+                    const empW2 = Number(inputValue) > 0 ? Number(inputValue) : 0;
                     const value = { ...context.value };
                     value.payrollBase = 'all';
                     value.employeesW2 = empW2;
@@ -153,6 +173,7 @@ const Part1 = (props) => {
                     onChangeW2(empW2);
                     context.updateState({
                       value,
+                      employeeCount: empCount,
                       medLeaveCont: (empCount >= minEmployees) ? largeCompMedCont : smallCompMedCont,
                       famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont,
                       over25: empCount >= minEmployees,
@@ -178,13 +199,14 @@ const Part1 = (props) => {
                   required
                   unit=""
                   onChange={(e, inputValue) => {
-                    const emp1099 = Number(inputValue);
+                    const emp1099 = Number(inputValue) > 0 ? Number(inputValue) : 0;
                     // Pull value from form for updating.
                     const value = { ...context.value };
                     value.employees1099 = emp1099;
                     const empCount = context.value.employeesW2 + (emp1099 / (emp1099 + context.value.employeesW2) >= emp1099Fraction ? emp1099 : 0);
                     context.updateState({
                       value,
+                      employeeCount: empCount,
                       medLeaveCont: (empCount >= minEmployees) ? largeCompMedCont : smallCompMedCont,
                       famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont,
                       over25: empCount >= minEmployees,
@@ -195,7 +217,7 @@ const Part1 = (props) => {
                   }}
                   showButtons
                 />
-                <Collapse in={hasMassEmployees && employeesW2 > 0} dimension="height" className="ma__callout-alert">
+                <Collapse in={hasMassEmployees && (employeesW2 > 0 || employees1099 > 0)} dimension="height" className="ma__callout-alert">
                   <div className="ma__collapse">
                     <CalloutAlert theme="c-primary">
                       { outputMessage }

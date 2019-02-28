@@ -6,7 +6,8 @@ import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'reac
 import { toCurrency, getHelpTip } from '../../utils';
 import ContributionVariables from '../../data/ContributionVariables.json';
 import PartThreeProps from '../../data/PartThree.json';
-import tableData from '../../data/table.data';
+import AllTableData from '../../data/AllTable.data';
+import SingleTableData from '../../data/SingleTable.data';
 
 import '../../css/index.css';
 
@@ -37,20 +38,25 @@ const Part3 = (props) => {
               over25,
               over50per,
               employeeCount,
+              hasMassEmployees,
+              payrollBase,
+              famLeaveCont,
+              medLeaveCont,
+              timeValue,
+              timePeriod,
               value: {
-                payrollW2, payroll1099, payrollWages
+                payrollW2, payroll1099, payrollWages, employeesW2, employees1099
               }
-            } = context;
-            const {
-              hasMassEmployees, payrollBase, famLeaveCont, medLeaveCont, timeValue, timePeriod
             } = context;
 
             const medPercent = over25 ? largeMedPercent : smallMedPercent;
             const famPercent = over25 ? largeFamPercent : smallFamPercent;
 
             let totalPayroll;
-            if (payrollBase === 'all') {
+            if (payrollBase === 'all' && employeesW2 > 0) {
               totalPayroll = over50per ? (numbro.unformat(payroll1099) + numbro.unformat(payrollW2)) : numbro.unformat(payrollW2);
+            } else if (payrollBase === 'all' && !(employeesW2 > 0)) {
+              totalPayroll = numbro.unformat(payroll1099);
             } else {
               totalPayroll = numbro.unformat(payrollWages) > socialSecCap ? socialSecCap : numbro.unformat(payrollWages);
             }
@@ -140,7 +146,7 @@ const Part3 = (props) => {
             const medLeaveEmp = medLeave * (maxMed - medLeaveCont);
             const famLeaveEmp = famLeave * (1 - famLeaveCont);
 
-            const enableAll = payrollBase === 'all' && numbro.unformat(payrollW2) > 0 && (over50per ? numbro.unformat(payroll1099) > 0 : true);
+            const enableAll = payrollBase === 'all' && ((employeesW2 > 0 && numbro.unformat(payrollW2) > 0) || (!(employeesW2 > 0) && employees1099 > 0 && numbro.unformat(payroll1099) > 0)) && (over50per ? numbro.unformat(payroll1099) > 0 : true);
             const enableOne = payrollBase === 'one' && numbro.unformat(payrollWages) > 0;
             const enable = hasMassEmployees && (employeeCount > 0) && (enableOne || enableAll);
 
@@ -182,7 +188,7 @@ const Part3 = (props) => {
             const medLeaveTotal = (medLeaveComp + medLeaveEmp) / timeValue;
             const famLeaveTotal = (famLeaveComp + famLeaveEmp) / timeValue;
 
-            const tBody = tableData.bodies[0];
+            const tBody = payrollBase === 'all' ? AllTableData.bodies[0] : SingleTableData.bodies[0];
             const tRow1 = tBody.rows[0];
             const tRow2 = tBody.rows[1];
             const tRow3 = tBody.rows[2];
@@ -327,7 +333,7 @@ const Part3 = (props) => {
                         className="ma__select-box js-dropdown"
                       />
                     </h2>
-                    <Table {...tableData} />
+                    {payrollBase === 'all' ? <Table {...AllTableData} /> : <Table {...SingleTableData} />}
                   </Fragment>
                 )}
               </Fragment>
