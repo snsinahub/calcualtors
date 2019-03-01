@@ -13,6 +13,7 @@ import '../../css/index.css';
  * We do this since we are not using a urlPropsQueryConfig.
  */
 const mapUrlChangeHandlersToProps = () => ({
+  onChangeMedCont: (value) => replaceInUrlQuery('medCont', encode(UrlQueryParamTypes.number, value)),
   onChangeMassEmp: (value) => replaceInUrlQuery('massEmp', encode(UrlQueryParamTypes.string, value)),
   onChangeW2: (value) => replaceInUrlQuery('w2', encode(UrlQueryParamTypes.number, value)),
   onChangeEmp1099: (value) => replaceInUrlQuery('emp1099', encode(UrlQueryParamTypes.number, value))
@@ -25,18 +26,23 @@ const Part1 = (props) => {
   const {
     questionOne, questionTwo, questionThree, output
   } = PartOneProps;
-  const { onChangeMassEmp, onChangeW2, onChangeEmp1099 } = props;
+  const {
+    onChangeMassEmp, onChangeW2, onChangeEmp1099, onChangeMedCont
+  } = props;
   const calloutParagraphClass = 'ma__help-tip-many';
   const getDangerousParagraph = (text, key) => (<p className={calloutParagraphClass} dangerouslySetInnerHTML={{ __html: text }} key={key} />);
   return(
     <FormContext.Consumer>
       {
           (context) => {
-            const { employeesW2, employees1099 } = context.value;
-            const { hasMassEmployees } = context;
-            const over50per = (Number(employees1099) / (Number(employeesW2) + Number(employees1099))) >= emp1099Fraction;
-            const employeeCount = over50per ? (Number(employeesW2) + Number(employees1099)) : Number(employeesW2);
-            const over25 = employeeCount >= minEmployees;
+            const {
+              over25,
+              over50per,
+              hasMassEmployees,
+              value: {
+                employeesW2, employees1099
+              }
+            } = context;
             let outputMessage;
             if (over25 && over50per) {
               outputMessage = (
@@ -98,6 +104,26 @@ const Part1 = (props) => {
                 </Fragment>
               );
             }
+            if (!over25 && over50per && Number(employees1099) > 0 && !(Number(employeesW2) > 0)) {
+              outputMessage = (
+                <Fragment>
+                  {output.underMinEmpNoW2.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? <p className="ma__help-tip-many">{getHelpTip(message.paragraph, 'c-white', `underMinEmpNo1099-${messageIndex}`)}</p> : getDangerousParagraph(message.paragraph.content, `underMinEmpNo1099-${messageIndex}`)
+                  ))}
+                </Fragment>
+              );
+            }
+            if (over25 && over50per && Number(employees1099) > 0 && !(Number(employeesW2) > 0)) {
+              outputMessage = (
+                <Fragment>
+                  {output.overMinEmpNoW2.map((message, messageIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    message.paragraph.helpText ? <p className="ma__help-tip-many">{getHelpTip(message.paragraph, 'c-white', `underMinEmpNo1099-${messageIndex}`)}</p> : getDangerousParagraph(message.paragraph.content, `underMinEmpNo1099-${messageIndex}`)
+                  ))}
+                </Fragment>
+              );
+            }
             return(
               <fieldset>
                 <InputRadioGroup
@@ -138,7 +164,7 @@ const Part1 = (props) => {
                   required
                   unit=""
                   onChange={(e, inputValue) => {
-                    const empW2 = Number(inputValue);
+                    const empW2 = Number(inputValue) > 0 ? Number(inputValue) : 0;
                     const value = { ...context.value };
                     value.payrollBase = 'all';
                     value.employeesW2 = empW2;
@@ -147,9 +173,13 @@ const Part1 = (props) => {
                     onChangeW2(empW2);
                     context.updateState({
                       value,
+                      employeeCount: empCount,
                       medLeaveCont: (empCount >= minEmployees) ? largeCompMedCont : smallCompMedCont,
-                      famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont
+                      famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont,
+                      over25: empCount >= minEmployees,
+                      over50per: (Number(context.value.employees1099) / (Number(empW2) + Number(context.value.employees1099))) >= emp1099Fraction
                     });
+                    onChangeMedCont(value.medLeaveCont);
                   }}
                   showButtons
                 />
@@ -169,21 +199,25 @@ const Part1 = (props) => {
                   required
                   unit=""
                   onChange={(e, inputValue) => {
-                    const emp1099 = Number(inputValue);
+                    const emp1099 = Number(inputValue) > 0 ? Number(inputValue) : 0;
                     // Pull value from form for updating.
                     const value = { ...context.value };
                     value.employees1099 = emp1099;
                     const empCount = context.value.employeesW2 + (emp1099 / (emp1099 + context.value.employeesW2) >= emp1099Fraction ? emp1099 : 0);
                     context.updateState({
                       value,
+                      employeeCount: empCount,
                       medLeaveCont: (empCount >= minEmployees) ? largeCompMedCont : smallCompMedCont,
-                      famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont
+                      famLeaveCont: (empCount >= minEmployees) ? largeCompFamCont : smallCompFamCont,
+                      over25: empCount >= minEmployees,
+                      over50per: (Number(emp1099) / (Number(context.value.employeesW2) + Number(emp1099))) >= emp1099Fraction
                     });
                     onChangeEmp1099(emp1099);
+                    onChangeMedCont(value.medLeaveCont);
                   }}
                   showButtons
                 />
-                <Collapse in={hasMassEmployees && employeesW2 > 0} dimension="height" className="ma__callout-alert">
+                <Collapse in={hasMassEmployees && (employeesW2 > 0 || employees1099 > 0)} dimension="height" className="ma__callout-alert">
                   <div className="ma__collapse">
                     <CalloutAlert theme="c-primary">
                       { outputMessage }
@@ -201,6 +235,7 @@ const Part1 = (props) => {
 
 Part1.propTypes = {
   /** Functions that push changed context props to the url. */
+  onChangeMedCont: PropTypes.func,
   onChangeMassEmp: PropTypes.func,
   onChangeW2: PropTypes.func,
   onChangeEmp1099: PropTypes.func
