@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Footer, PageHeader } from '@massds/mayflower-react';
+import { Header, Footer, PageHeader, Collapse } from '@massds/mayflower-react';
 import { decode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery, encode } from 'react-url-query';
 import UtilityNavData from './data/UtilityNav.data';
 import MainNavData from './data/MainNav.data';
@@ -34,7 +34,7 @@ const mapUrlChangeHandlersToProps = () => ({
 });
 
 const validNumber = (num) => (num || (num !== null && num !== undefined));
-const getDefaultNumber = (num) => ((validNumber(num)) ? Number(num) : 0);
+const getDefaultNumber = (num) => ((validNumber(num)) ? Number(num) : null);
 
 const getWeeks = (qOneProps, selected) => {
   let maxWeeks;
@@ -58,7 +58,7 @@ class App extends Component {
       yearIncome: getDefaultNumber(yearIncome),
       maxWeeks: getWeeks(PartOneProps, leaveReason),
       leaveReason,
-      belowMinSalary: getDefaultNumber(yearIncome) < BenefitsVariables.baseVariables.minSalary || false
+      belowMinSalary: !!((getDefaultNumber(yearIncome) && getDefaultNumber(yearIncome) < BenefitsVariables.baseVariables.minSalary))
     };
     /* eslint-enable react/no-unused-state */
     this.footerProps = {
@@ -85,7 +85,7 @@ class App extends Component {
     history.listen();
   }
 
-  handleInput = (e, value) => {
+  handleInput = (value) => {
     const numberValue = value;
     this.setState({
       yearIncome: numberValue
@@ -133,9 +133,13 @@ class App extends Component {
             <Part1 error={false} disabled={false} defaultSelected={leaveReason} onChange={this.handleRadio} />
             <hr />
             <Part2 onChange={this.handleInput} onBlur={this.handleBlur} disabled={questTwoDisabled} defaultValue={yearIncome} belowMinSalary={belowMinSalaryConv} />
-            {yearIncome > 0 && maxWeeks > 0 && !belowMinSalaryConv && (
-              <Part3 yearIncome={yearIncome} maxWeeks={maxWeeks} />
-            )}
+            {yearIncome > 0 && maxWeeks > 0 &&
+              <Collapse in={yearIncome > BenefitsVariables.baseVariables.minSalary} dimension="height" className="ma__callout-alert">
+                <div className="ma__collapse">
+                  <Part3 yearIncome={yearIncome} maxWeeks={maxWeeks} leaveReason={leaveReason} />
+                </div>
+              </Collapse>
+            }
           </section>
         </main>
         <Footer {...this.footerProps} />
