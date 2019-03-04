@@ -254,10 +254,13 @@ const Part3 = (props) => {
                           onChange={(event, value) => onFamChange(event, value, true)}
                               // Remove onBlur event after integration of form context
                           onBlur={(event, value) => onFamBlur(event, value, true)}
-                          key={Math.random()}
+                          key={famLeaveCont < minFam ? `family-leave-input-number-emp-${famLeaveCont}-${Math.random()}` : `family-leave-input-number-emp-${famLeaveCont}`}
                         />
                       </div>
-                      <InputSlider {...familyLeaveSliderProps} key={Math.random()} />
+                      <InputSlider
+                        {...familyLeaveSliderProps}
+                        key={famLeaveCont < minFam ? `medical-leave-input-slider-${famLeaveCont}-${Math.random()}` : `medical-leave-input-slider-${famLeaveCont}`}
+                      />
                     </Input>
                     <Input labelText={questionOne.right.main} required disabled={!enable}>
                       <div className="ma__input-group--ends">
@@ -304,10 +307,13 @@ const Part3 = (props) => {
                           onChange={(event, value) => onMedChange(event, value, true)}
                           // Remove onBlur event after integration of form context
                           onBlur={(event, value) => onMedBlur(event, value, true)}
-                          key={Math.random()}
+                          key={medLeaveCont < minMed ? `medical-leave-input-number-emp-${medLeaveCont}-${Math.random()}` : `medical-leave-input-number-emp-${medLeaveCont}`}
                         />
                       </div>
-                      <InputSlider {...medLeaveSliderProps} key={Math.random()} />
+                      <InputSlider
+                        {...medLeaveSliderProps}
+                        key={medLeaveCont < minMed ? `medical-leave-input-slider-${medLeaveCont}-${Math.random()}` : `medical-leave-input-slider-${medLeaveCont}`}
+                      />
                     </Input>
                   </div>
                 </fieldset>
