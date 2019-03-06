@@ -44,6 +44,8 @@ const Part3 = (props) => {
               medLeaveCont,
               timeValue,
               timePeriod,
+              famSliderKey,
+              medSliderKey,
               value: {
                 payrollW2, payroll1099, payrollWages, employeesW2, employees1099
               }
@@ -95,7 +97,7 @@ const Part3 = (props) => {
                   fracNum = (maxMedPer - value) / 100;
                 }
               }
-              context.updateState({ medLeaveCont: fracNum });
+              context.updateState({ medLeaveCont: fracNum, medSliderKey: Math.random() });
               onChangeMedCont(fracNum);
             };
             const onMedChange = (event, value, reverse) => {
@@ -111,7 +113,7 @@ const Part3 = (props) => {
               if (reverse) {
                 fracNum = (100 - value) / 100;
               }
-              context.updateState({ famLeaveCont: fracNum });
+              context.updateState({ famLeaveCont: fracNum, famSliderKey: Math.random() });
               onChangeFamCont(fracNum);
             };
             const onFamChange = (event, value, reverse) => {
@@ -168,7 +170,7 @@ const Part3 = (props) => {
               domain: [0, 100],
               skipped: true,
               disabled: !enable,
-              onChange: (value) => onFamSliderChange(value)
+              onUpdate: (value) => onFamSliderChange(value)
             };
             const medLeaveSliderProps = {
               id: 'medical-leave',
@@ -182,7 +184,7 @@ const Part3 = (props) => {
               ticks: medTicks,
               skipped: true,
               disabled: !enable,
-              onChange: (value) => onMedSliderChange(value)
+              onUpdate: (value) => onMedSliderChange(value)
             };
 
             const medLeaveTotal = (medLeaveComp + medLeaveEmp) / timeValue;
@@ -259,7 +261,7 @@ const Part3 = (props) => {
                       </div>
                       <InputSlider
                         {...familyLeaveSliderProps}
-                        key={famLeaveCont < minFam ? `medical-leave-input-slider-${famLeaveCont}-${Math.random()}` : `medical-leave-input-slider-${famLeaveCont}`}
+                        key={famSliderKey ? `family-leave-input-slider-${famSliderKey}` : 'family-leave-input-slider'}
                       />
                     </Input>
                     <Input labelText={questionOne.right.main} required disabled={!enable}>
@@ -312,7 +314,7 @@ const Part3 = (props) => {
                       </div>
                       <InputSlider
                         {...medLeaveSliderProps}
-                        key={medLeaveCont < minMed ? `medical-leave-input-slider-${medLeaveCont}-${Math.random()}` : `medical-leave-input-slider-${medLeaveCont}`}
+                        key={medSliderKey ? `medical-leave-input-slider-${medSliderKey}` : 'medical-leave-input-slider'}
                       />
                     </Input>
                   </div>
