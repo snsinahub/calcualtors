@@ -85,16 +85,24 @@ class App extends Component {
     history.listen();
   }
 
-  handleInput = (value) => {
+  handleInput = (value, id, type) => {
     const numberValue = value;
     this.setState({
       yearIncome: numberValue
     });
     this.props.onChangeYearIncome(value);
-    if (numberValue > BenefitsVariables.baseVariables.minSalary) {
+    if (numberValue >= BenefitsVariables.baseVariables.minSalary) {
       this.setState({
         belowMinSalary: false
       });
+    }
+    // Allow rendering belowMinSalary callout on inputCurrency up/down button click.
+    if (type === 'click') {
+      if (numberValue < BenefitsVariables.baseVariables.minSalary) {
+        this.setState({
+          belowMinSalary: true
+        });
+      }
     }
   };
 
@@ -134,7 +142,7 @@ class App extends Component {
             <hr />
             <Part2 onChange={this.handleInput} onBlur={this.handleBlur} disabled={questTwoDisabled} defaultValue={yearIncome} belowMinSalary={belowMinSalaryConv} />
             {yearIncome > 0 && maxWeeks > 0 &&
-              <Collapse in={yearIncome > BenefitsVariables.baseVariables.minSalary} dimension="height" className="ma__callout-alert">
+              <Collapse in={yearIncome >= BenefitsVariables.baseVariables.minSalary} dimension="height" className="ma__callout-alert">
                 <div className="ma__collapse">
                   <Part3 yearIncome={yearIncome} maxWeeks={maxWeeks} leaveReason={leaveReason} />
                 </div>
