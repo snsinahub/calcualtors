@@ -24,7 +24,7 @@ const mapUrlChangeHandlersToProps = () => ({
 
 const Part3 = (props) => {
   const {
-    smallMedPercent, smallFamPercent, largeMedPercent, largeFamPercent, largeCompFamCont, smallCompFamCont, empMedCont, largeCompMedCont, smallCompMedCont, socialSecCap
+    totContribution, totMedPercent, totFamPercent, largeCompFamCont, smallCompFamCont, empMedCont, largeCompMedCont, smallCompMedCont, socialSecCap
   } = ContributionVariables.baseVariables;
   const { questionOne, questionTwo } = PartThreeProps;
   const {
@@ -44,13 +44,15 @@ const Part3 = (props) => {
               medLeaveCont,
               timeValue,
               timePeriod,
+              famSliderKey,
+              medSliderKey,
               value: {
                 payrollW2, payroll1099, payrollWages, employeesW2, employees1099
               }
             } = context;
 
-            const medPercent = over25 ? largeMedPercent : smallMedPercent;
-            const famPercent = over25 ? largeFamPercent : smallFamPercent;
+            const medPercent = totContribution * totMedPercent;
+            const famPercent = totContribution * totFamPercent;
 
             let totalPayroll;
             if (payrollBase === 'all' && employeesW2 > 0) {
@@ -95,7 +97,7 @@ const Part3 = (props) => {
                   fracNum = (maxMedPer - value) / 100;
                 }
               }
-              context.updateState({ medLeaveCont: fracNum });
+              context.updateState({ medLeaveCont: fracNum, medSliderKey: Math.random() });
               onChangeMedCont(fracNum);
             };
             const onMedChange = (event, value, reverse) => {
@@ -111,7 +113,7 @@ const Part3 = (props) => {
               if (reverse) {
                 fracNum = (100 - value) / 100;
               }
-              context.updateState({ famLeaveCont: fracNum });
+              context.updateState({ famLeaveCont: fracNum, famSliderKey: Math.random() });
               onChangeFamCont(fracNum);
             };
             const onFamChange = (event, value, reverse) => {
@@ -168,7 +170,7 @@ const Part3 = (props) => {
               domain: [0, 100],
               skipped: true,
               disabled: !enable,
-              onChange: (value) => onFamSliderChange(value)
+              onUpdate: (value) => onFamSliderChange(value)
             };
             const medLeaveSliderProps = {
               id: 'medical-leave',
@@ -182,7 +184,7 @@ const Part3 = (props) => {
               ticks: medTicks,
               skipped: true,
               disabled: !enable,
-              onChange: (value) => onMedSliderChange(value)
+              onUpdate: (value) => onMedSliderChange(value)
             };
 
             const medLeaveTotal = (medLeaveComp + medLeaveEmp) / timeValue;
@@ -254,10 +256,13 @@ const Part3 = (props) => {
                           onChange={(event, value) => onFamChange(event, value, true)}
                               // Remove onBlur event after integration of form context
                           onBlur={(event, value) => onFamBlur(event, value, true)}
-                          key={Math.random()}
+                          key={famLeaveCont < minFam ? `family-leave-input-number-emp-${famLeaveCont}-${Math.random()}` : `family-leave-input-number-emp-${famLeaveCont}`}
                         />
                       </div>
-                      <InputSlider {...familyLeaveSliderProps} key={Math.random()} />
+                      <InputSlider
+                        {...familyLeaveSliderProps}
+                        key={famSliderKey ? `family-leave-input-slider-${famSliderKey}` : 'family-leave-input-slider'}
+                      />
                     </Input>
                     <Input labelText={questionOne.right.main} required disabled={!enable}>
                       <div className="ma__input-group--ends">
@@ -304,10 +309,13 @@ const Part3 = (props) => {
                           onChange={(event, value) => onMedChange(event, value, true)}
                           // Remove onBlur event after integration of form context
                           onBlur={(event, value) => onMedBlur(event, value, true)}
-                          key={Math.random()}
+                          key={medLeaveCont < minMed ? `medical-leave-input-number-emp-${medLeaveCont}-${Math.random()}` : `medical-leave-input-number-emp-${medLeaveCont}`}
                         />
                       </div>
-                      <InputSlider {...medLeaveSliderProps} key={Math.random()} />
+                      <InputSlider
+                        {...medLeaveSliderProps}
+                        key={medSliderKey ? `medical-leave-input-slider-${medSliderKey}` : 'medical-leave-input-slider'}
+                      />
                     </Input>
                   </div>
                 </fieldset>
