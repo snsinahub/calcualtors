@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import TagManager from 'react-gtm-module';
 import numbro from 'numbro';
 import { SelectBox, Input, InputSlider, InputNumber, FormContext, Table } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
@@ -8,6 +9,7 @@ import ContributionVariables from '../../data/ContributionVariables.json';
 import PartThreeProps from '../../data/PartThree.json';
 import AllTableData from '../../data/AllTable.data';
 import SingleTableData from '../../data/SingleTable.data';
+
 
 import '../../css/index.css';
 
@@ -127,11 +129,25 @@ const Part3 = (props) => {
               const fracNum = value > minMedPer ? value / 100 : minMed;
               context.updateState({ medLeaveCont: fracNum });
               onChangeMedCont(fracNum);
+              TagManager.dataLayer({
+dataLayer: {
+                event: 'gtm.slider',
+                sliderValue: fracNum,
+                sliderID: 'medical-leave'
+              }
+});
             };
             const onFamSliderChange = (value) => {
               const fracNum = value > minFamPer ? value / 100 : minFam;
               context.updateState({ famLeaveCont: fracNum });
               onChangeFamCont(fracNum);
+              TagManager.dataLayer({
+ dataLayer: {
+                event: 'gtm.slider',
+                sliderValue: fracNum,
+                sliderID: 'family-leave'
+              }
+});
             };
             const getTimeValue = (text) => {
               let value;
@@ -208,7 +224,7 @@ const Part3 = (props) => {
               <Fragment>
                 <fieldset>
                   <legend className={`ma__label${enable ? '' : ' ma__label--disabled'}`}>
-                    {over25 ? getHelpTip(questionOne.over25) : getHelpTip(questionOne.under25)}
+                    {over25 ? getHelpTip(questionOne.over25, '', 'over25Split') : getHelpTip(questionOne.under25, '', 'under25Split')}
                   </legend>
                   <div className="ma__input-group--two">
                     <Input labelText={questionOne.left.main} required disabled={!enable}>
@@ -326,7 +342,7 @@ const Part3 = (props) => {
                         label={questionTwo.question}
                         stackLabel={false}
                         required
-                        id="color-select"
+                        id="payroll_frequency"
                         options={questionTwo.options}
                         selected={timePeriod || 'Year'}
                         onChangeCallback={({ selected }) => {
