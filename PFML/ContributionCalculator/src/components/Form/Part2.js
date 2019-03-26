@@ -44,9 +44,9 @@ const Part2 = (props) => {
                 payrollW2, payroll1099, payrollWages, employeesW2
               }
             } = context;
-            const medPercent = totContribution * totMedPercent;
+            const medPercent = Math.round(totContribution * totMedPercent * 1e4) / 1e4;
             const medPayrollPercent = over25 ? (largeCompMedCont + empMedCont) : empMedCont;
-            const famPercent = totContribution * totFamPercent;
+            const famPercent = Math.round(totContribution * totFamPercent * 1e4) / 1e4;
             const totalPercent = medPercent + famPercent;
             let totalPayroll;
             if (payrollBase === 'all' && employeesW2 > 0) {
@@ -97,6 +97,7 @@ const Part2 = (props) => {
                         placeholder="e.g. $100,000"
                         errorMsg={questionTwo.errorMsg}
                         defaultValue={numbro.unformat(payrollW2)}
+                        max={1000000000000}
                         min={0}
                         format={{
                           mantissa: 2,
@@ -128,6 +129,7 @@ const Part2 = (props) => {
                         placeholder="e.g. $100,000"
                         errorMsg={questionThree.errorMsg}
                         defaultValue={numbro.unformat(payroll1099)}
+                        max={1000000000000}
                         min={0}
                         format={{
                           mantissa: 2,
@@ -202,6 +204,7 @@ const Part2 = (props) => {
                         placeholder="e.g. $100,000"
                         errorMsg={questionFour.errorMsg}
                         defaultValue={numbro.unformat(payrollWages)}
+                        max={1000000000000}
                         min={0}
                         format={{
                           mantissa: 2,
