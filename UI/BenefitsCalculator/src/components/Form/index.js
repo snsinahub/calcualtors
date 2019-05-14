@@ -4,6 +4,7 @@ import {
   InputCurrency, Button, FormProvider, Form, FormContext, InputCheckBox
 } from '@massds/mayflower-react';
 import Output from './output';
+import inputProps from '../../data/input.json';
 
 import './index.css';
 
@@ -33,6 +34,7 @@ class Calculator extends Component {
 
   render() {
     const { applyAll, submitted } = this.state;
+    const { inputLabel, applyAllLabel } = inputProps;
     const inputCurrencyProps = {
       placeholder: 'e.g. $10,000',
       format: {
@@ -43,7 +45,8 @@ class Calculator extends Component {
       required: true,
       inline: true,
       min: 0,
-      step: 1
+      step: 10,
+      showButtons: false
     };
     return(
       <FormProvider>
@@ -53,21 +56,23 @@ class Calculator extends Component {
             <Fragment>
               <InputCurrency
                 {... inputCurrencyProps}
-                labelText={`${this.q1.qStart} – ${this.q1.qEnd} total wages:`}
+                labelText={`${this.q1.qStart} – ${this.q1.qEnd} ${inputLabel}`}
                 id="quarter1"
                 name="quarter1"
                 onChange={(value, id) => {
-                  formContext.setValue({ id, value });
-                  if (applyAll) {
-                    formContext.setValue({ id: 'quarter2', value });
-                    formContext.setValue({ id: 'quarter3', value });
-                    formContext.setValue({ id: 'quarter4', value });
+                  if (!Number.isNaN(value)) {
+                    formContext.setValue({ id, value });
+                    if (applyAll) {
+                      formContext.setValue({ id: 'quarter2', value });
+                      formContext.setValue({ id: 'quarter3', value });
+                      formContext.setValue({ id: 'quarter4', value });
+                    }
                   }
                 }}
               />
               <InputCheckBox
                 id="apply-all"
-                label="Apply this quarter's wages to the all quarters."
+                label={applyAllLabel}
                 icon={{ name: '', ariaHidden: true }}
                 defaultValue={false}
                 onChange={(e, value) => {
@@ -79,11 +84,10 @@ class Calculator extends Component {
                   formContext.setValue({ id: 'quarter3', value: quarter1 });
                   formContext.setValue({ id: 'quarter4', value: quarter1 });
                 }}
-                errorMsg="You are required to check this box."
               />
               <InputCurrency
                 {... inputCurrencyProps}
-                labelText={`${this.q2.qStart} – ${this.q2.qEnd} total wages:`}
+                labelText={`${this.q2.qStart} – ${this.q2.qEnd} ${inputLabel}`}
                 id="quarter2"
                 name="quarter2"
                 disabled={applyAll}
@@ -93,7 +97,7 @@ class Calculator extends Component {
               />
               <InputCurrency
                 {... inputCurrencyProps}
-                labelText={`${this.q3.qStart} – ${this.q3.qEnd} total wages:`}
+                labelText={`${this.q3.qStart} – ${this.q3.qEnd} ${inputLabel}`}
                 id="quarter3"
                 name="quarter3"
                 disabled={applyAll}
@@ -103,7 +107,7 @@ class Calculator extends Component {
               />
               <InputCurrency
                 {... inputCurrencyProps}
-                labelText={`${this.q4.qStart} – ${this.q4.qEnd} total wages:`}
+                labelText={`${this.q4.qStart} – ${this.q4.qEnd} ${inputLabel}`}
                 id="quarter4"
                 name="quarter4"
                 disabled={applyAll}
@@ -112,7 +116,8 @@ class Calculator extends Component {
                 }}
               />
               <Button
-                text="See Benefits"
+                type="submit"
+                text={inputProps.buttonText}
                 onClick={() => this.setState({ submitted: true })}
               />
             </Fragment>

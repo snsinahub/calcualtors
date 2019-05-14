@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import numbro from 'numbro';
 import { CalloutAlert, HelpTip, Paragraph } from '@massds/mayflower-react';
 import { toCurrency, toPercentage } from '../../utils';
+import variables from '../../data/variables.json';
 
 const sum = (a, b) => a + b;
 
 const Output = (props) => {
+  const {
+    maxBenefitDuration, quartersSumThreshhold, weeklyBenefitMax, maxBenefitRatio
+  } = variables;
   const {
     quarter1, quarter2, quarter3, quarter4
   } = props;
@@ -28,30 +32,27 @@ const Output = (props) => {
   }
   const topQuartersSum = topQuarters && topQuarters.length > 0 && topQuarters.reduce(sum);
   const weeklyBenefit = 1 / 2 * topQuartersSum / weeksInTopQuarters;
-  const weeklyBenefitMax = 795;
   // final weekly benefit is rounded to the nearest dollar amount
   const weeklyBenefitFinal = weeklyBenefit > weeklyBenefitMax ? weeklyBenefitMax : Math.round(weeklyBenefit);
 
   // qualifications
-  const quartersSumThreshhold = 4700;
   const quartersSum = quartersHaveValue.length > 0 && quartersHaveValue.reduce(sum);
   // qualification 1: total wages is no less than threshhold
   const qualification1 = !(quartersSum < quartersSumThreshhold);
   // qualification 2: total wages is no less 30 times the weekly benefits
-  const qualification2 = !(quartersSum < 30 * weeklyBenefitFinal);
+  const qualification2 = !(quartersSum < maxBenefitDuration * weeklyBenefitFinal);
   const qualified = qualification1 && qualification2;
 
   // max benefit credit
-  const maxBenefitDuration = 30;
   const maxBenefitOption1 = maxBenefitDuration * weeklyBenefitFinal;
-  const maxBenefitOption2 = 0.36 * quartersSum;
+  const maxBenefitOption2 = maxBenefitRatio * quartersSum;
   const maxBenefitFinal = maxBenefitOption1 > maxBenefitOption2 ? maxBenefitOption2 : maxBenefitOption1;
   const maxBenefitOther = maxBenefitOption1 > maxBenefitOption2 ? maxBenefitOption1 : maxBenefitOption2;
 
   // benefit duration
   const benefitDuration = maxBenefitFinal / weeklyBenefitFinal;
 
-
+  const qualifyAddition = 'You may be eligible for an additional weekly dependency allowance if you have dependent children.';
   const helpTextBasePeriod2Q = 'Your weekly benefit amount is equal to half of the sum of total wages for the 2 highest-earning quarters divided by the number of weeks in the combined quarters:';
   const helpTextBasePeriod1Q = 'Your weekly benefit amount is equal to half of the highest-earning quarter divided by the number of weeks in the quarter:';
   const helpTextWeeks2Q = 'weeks in the combined quarters';
@@ -97,14 +98,21 @@ const Output = (props) => {
             <Paragraph text={`<strong>${toCurrency(maxBenefitOption1)}</strong> = ${maxBenefitDuration} x ${toCurrency(weeklyBenefitFinal)}`} />
           </li>
           <li>
-            36% of the total wages in your base period:
-            <Paragraph text={`<strong>${toCurrency(maxBenefitOption2)}</strong> = 36% x ${toCurrency(quartersSum)}`} />
+            {toPercentage(maxBenefitRatio)}
+            {' '}
+            of the total wages in your base period:
+            <Paragraph text={`<strong>${toCurrency(maxBenefitOption2)}</strong> = ${toPercentage(maxBenefitRatio)} x ${toCurrency(quartersSum)}`} />
           </li>
         </ul>
         <Paragraph text={`Since ${toCurrency(maxBenefitFinal)} is less than ${toCurrency(maxBenefitOther)}, your maximum benefit credit is <strong>${toCurrency(maxBenefitFinal)}</strong>.`} />
       </Fragment>
     </div>
   );
+
+  const helptipIframeProp = {};
+  if (process.env.REACT_APP_IFRAME === 'true') {
+    helptipIframeProp.bypassMobileStyle = true;
+  }
 
   return(
     <Fragment>
@@ -113,17 +121,19 @@ const Output = (props) => {
         <CalloutAlert theme="c-primary" icon={null}>
           <HelpTip
             theme="c-white"
-            text={`You would be eligible to receive
+            text={`Based on the information you provided, you may be eligible to receive
               <strong>${toCurrency(weeklyBenefitFinal)}</strong> for <strong>${parseInt(benefitDuration, 10)} weeks</strong>,
               based on your maximum benefit credit of <strong>${toCurrency(maxBenefitFinal)}</strong>.`}
             triggerText={[`<strong>${toCurrency(weeklyBenefitFinal)}</strong>`, `<strong>${parseInt(benefitDuration, 10)} weeks</strong>`, `<strong>${toCurrency(maxBenefitFinal)}</strong>`]}
             id="help-tip-benefits"
             labelID="help-tip-benefits-label"
+            {...helptipIframeProp}
           >
             { getBenefitsHelpText() }
             { getDurationHelpText() }
             { getTotalHelpText() }
           </HelpTip>
+          <Paragraph text={qualifyAddition} />
         </CalloutAlert>
       ) : (
         <CalloutAlert theme="c-error-red" icon={null}>
@@ -133,6 +143,7 @@ const Output = (props) => {
             triggerText={['<span>not eligible</span>']}
             id="help-tip-benefits"
             labelID="help-tip-benefits-label"
+            {...helptipIframeProp}
           >
             <div className="ma__help-text">
               {
@@ -159,7 +170,11 @@ Output.propTypes = {
   quarter1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   quarter2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   quarter3: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  quarter4: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  quarter4: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  maxBenefitDuration: PropTypes.string,
+  quartersSumThreshhold: PropTypes.string,
+  weeklyBenefitMax: PropTypes.string,
+  maxBenefitRatio: PropTypes.string
 };
 
 export default Output;

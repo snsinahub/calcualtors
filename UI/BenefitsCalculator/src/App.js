@@ -8,6 +8,8 @@ import HeaderSearchData from './data/HeaderSearch.data';
 import FooterData from './data/Footer.data';
 import SocialLinksLiveData from './data/SocialLinksLive.json';
 import Form from './components/Form';
+import variables from './data/variables.json';
+import inputProps from './data/input.json';
 
 import './index.css';
 
@@ -26,45 +28,52 @@ class App extends Component {
       hideBackTo: true,
       siteLogoDomain: { url: { domain: 'https://www.mass.gov/' } }
     };
+    this.helptipIframeProp = {};
+    if (process.env.REACT_APP_IFRAME === 'true') {
+      this.helptipIframeProp.bypassMobileStyle = true;
+    }
   }
 
   render() {
+    const { title, description } = variables;
     return(
       <div className="App">
-        {process.env.REACT_APP_IFRAME === 'false' && <Header {...this.headerProps} />}
-        <main className="main-content">
-          <PageHeader
-            title="UI Claimants Benefits Calculator"
-            optionalContents={[{
-              paragraph: {
-                text:
-              'If you are eligible to receive unemployment benefits, you will receive a weekly benefit amount of approximately 50% of your average weekly wage, up to the maximum set by law. As of October 2018, the maximum weekly benefit amount is $795 per week.'
-              }
-            }, {
-              paragraph: {
-                text:
-              'This calculator helps you estimate your benefits. It is only advisory. You will be notified of your outcome and benefit determination 3-4 weeks after you apply.'
-              }
-            }]}
-          />
-          <section className="main-content main-content--two">
-            <div className="page-content">
-              <hr />
-              <h2>
-                <HelpTip
-                  text="Enter the total wages you received in the last 4 quarters to estimate your benefits."
-                  triggerText={['total wages you received in the last 4 quarters']}
-                  helpText={['Total wages means the gross amount that appears on your paycheck or W-2. Do not use wages net of tax or other deductions. Make sure to enter your wages for the quarter when you actually received them, not when you earned them.']}
-                  id="helptext-total-wages"
-                />
-              </h2>
+        {process.env.REACT_APP_IFRAME === 'true' ? (
+          <div className="page-content">
+            <hr />
+            <h2>
+              <HelpTip {...inputProps.inputTitle} {...this.helptipIframeProp} id="helptext-total-wages" />
+            </h2>
+            <Form />
+          </div>
+        ) : (
+          <div>
+            <Header {...this.headerProps} />
+            <main className="main-content">
+              <PageHeader
+                title={title}
+                optionalContents={description.map((paragraph) => ({
+                  paragraph: {
+                    text: paragraph
+                  }
+                }))}
+              />
+              <section className="main-content main-content--two">
+                <div className="page-content">
+                  <hr />
+                  <h2>
+                    <HelpTip {...inputProps.inputTitle} {...this.helptipIframeProp} id="helptext-total-wages" />
+                  </h2>
 
-              <Form />
-            </div>
-          </section>
-          {process.env.REACT_APP_IFRAME === 'false' && <ButtonFixedFeedback href="https://www.mass.gov/feedback" />}
-        </main>
-        {process.env.REACT_APP_IFRAME === 'false' && <Footer {...this.footerProps} />}
+                  <Form />
+                </div>
+              </section>
+              <ButtonFixedFeedback href="https://www.mass.gov/feedback" />
+            </main>
+            <Footer {...this.footerProps} />
+          </div>
+        )
+      }
       </div>
     );
   }
