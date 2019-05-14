@@ -4,6 +4,11 @@ import {
 } from '@massds/mayflower-react';
 import { toCurrency } from './util';
 
+const helptipIframeProp = {};
+if (process.env.REACT_APP_IFRAME === 'true') {
+  helptipIframeProp.bypassMobileStyle = true;
+}
+
 const OutputOne = () => (
   <Input id="earnings-disregard" defaultValue={0}>
     <InputContext.Consumer>
@@ -22,6 +27,7 @@ const OutputOne = () => (
                 text={`${maxEarningsDisregardMessage}Any earnings greater than ${toCurrency(earningsDisregard)} will be deducted dollar-for-dollar from your weekly benefit payment (this is your earnings exclusion).`}
                 id="help-tip-weekly-benefits"
                 labelID="help-tip-weekly-benefits-label"
+                {...helptipIframeProp}
               >
                 <div className="ma__help-text">Earnings exclusion is 1/3 of your weekly benefit amount.</div>
               </HelpTip>

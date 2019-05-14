@@ -4,6 +4,11 @@ import {
 } from '@massds/mayflower-react';
 import { toCurrency, displayCurrency, toNumber } from './util';
 
+const helptipIframeProp = {};
+if (process.env.REACT_APP_IFRAME === 'true') {
+  helptipIframeProp.bypassMobileStyle = true;
+}
+
 export const ScenarioOne = () => {
   // Do not make a copy of formContext with object destructuring.
   // eslint-disable-next-line react/destructuring-assignment
@@ -37,6 +42,7 @@ export const ScenarioOne = () => {
                     text="Your weekly benefits are <strong>not affected</strong>."
                     id="help-tip-scenario-one"
                     labelID="help-tip-scenario-one-label"
+                    {...helptipIframeProp}
                   >
                     <div className="ma__help-text">As you make less than 1/3 of your weekly benefits through your part time employment, your weekly benefit stays the same.</div>
                   </HelpTip>
@@ -93,13 +99,14 @@ export const ScenarioTwo = () => {
                     text={`Your reduced weekly benefit amount is ${toCurrency(reducedBenefit)}.`}
                     id="help-tip-scenario-two"
                     labelID="help-tip-scenario-two-label"
+                    {...helptipIframeProp}
                   >
                     <div className="ma__help-text">
                       <Paragraph text={`Earnings over earnings exclusion: ${toCurrency(earningsOverDis)} = ${toCurrency(weeklyEarnings)} - ${toCurrency(earningsDisregard)}`} />
                       <Paragraph text={`Reduced weekly benefit: <strong>${toCurrency(reducedBenefit)}</strong> = ${toCurrency(weeklyBenefits)} - ${toCurrency(earningsOverDis)}`} />
                     </div>
                   </HelpTip>
-                  <Paragraph text={`You will take home ${displayCurrency(reducedBenefit)} from UI benefits and ${displayCurrency(weeklyEarnings)} from your income, a total amount of ${displayCurrency(toNumber(reducedBenefit) + toNumber(weeklyEarnings))} weekly. `} />
+                  <Paragraph text={`You will take home ${displayCurrency(reducedBenefit)} from UI benefits and ${displayCurrency(weeklyEarnings)} from your income, a gross total of ${displayCurrency(toNumber(reducedBenefit) + toNumber(weeklyEarnings))} weekly (before taxes, deductions, and other adjustments). `} />
                 </CalloutAlert>
               </Fragment>
             );
