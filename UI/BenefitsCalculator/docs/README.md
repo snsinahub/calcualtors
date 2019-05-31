@@ -6,6 +6,7 @@ The main logic of the calculator live in these files:
 
 ----
 To change max benefit duration from 26 weeks to 30 weeks, change `maxBenefitDuration` in [Variables](../src/data/variables.json) to `30`.
+> This variable will impact the formula of calculating the maxBenefit total and hence the benefits duration outcome.
 
 ----
 
@@ -48,21 +49,31 @@ The submit button will take the values from the user input and render the new ou
 ```
 ![sample qualification 1 screenshot](./media/output-disqualification1.png)
 
-2. qualification 2: total wages is no less than the maxBenefitFinal
- (`quartersSumThreshhold` in [Variables](../src/data/variables.json))
+2. qualification 2: total wages is no less than 30 times the weeklyBenefitFinal
 ```
-  const qualification2 = !(quartersSum < (maxBenefitDuration * weeklyBenefitFinal));
+  const qualification2 = !(quartersSum < (30 * weeklyBenefitFinal));
 ```
 ![sample qualification 2 screenshot](./media/output-disqualification2.png)
-Please note: this qualification can only fail if the `maxBenefitDuration` [Variables](../src/data/variables.json) is 30 weeks instead of 26 weeks.
 
-??? This qualification rule creates this (unexpected?) discrepancy:
-![enter image description here](./media/output-30-4000.png)
-![enter image description here](./media/output-30-10000.png)
+To test this rule, put in 2 quarters wages, with the lower quarter's wage less than 2/13 of the higher quarter's wage.
+```
+For 2 quarters and Q1 >= Q2
+Q1 + Q2 >= 30 * 1/2 * Q1 / 13
+Q1 + Q2 >= 15 /13 * Q1
+Q2 >= 2/13 * Q1
+Q2 >≈ 0.153846 Q1
+```
+e.g.
+```
+Q1: $10,000
+Q2: $1,538 or anything amount that is less than $1,538
+```
+[Outstanding questions about this rule](./questions.md)
+
 
 
 ### Benefits Calculation
-Weekly benefit calculation:
+#### Weekly benefit calculation:
 ```
   let topQuarters;
   let weeksInTopQuarters = 26;
@@ -82,3 +93,16 @@ If max weekly benefits $795 reached set weekly benefits to `weeklyBenefitMax` in
 const weeklyBenefitFinal = weeklyBenefit > weeklyBenefitMax ? weeklyBenefitMax : weeklyBenefit;
 ```
 ![26 weeks benefits exceeding max weekly benefit amount](./media/output-26-max.png)
+
+#### Max benefits credit calculation:
+```
+const maxBenefitOption1 = maxBenefitDuration * weeklyBenefitFinal;
+const maxBenefitOption2 = maxBenefitRatio * quartersSum;
+const maxBenefitFinal = maxBenefitOption1 > maxBenefitOption2 ? maxBenefitOption2 : maxBenefitOption1;
+const maxBenefitOther = maxBenefitOption1 > maxBenefitOption2 ? maxBenefitOption1 : maxBenefitOption2;
+```
+
+#### Benefits duration calculation:
+```
+const benefitDuration = maxBenefitFinal / weeklyBenefitFinal;
+```
