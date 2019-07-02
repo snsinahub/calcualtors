@@ -5,7 +5,7 @@ Code base for calculator UIs.
 - UI Benefits
   - [Production](https://calculator.digital.mass.gov/ui/yourbenefits)
   - [Development](https://calculator.digital.mass.gov/dev/ui/yourbenefits)
-  - [Testing](https://calculator.digital.mass.gov/test/ui/yourbenefits)
+  - [Testing](https://calculator.digital.mass.gov/forreview/ui/yourbenefits)
 - UI Part-time Benefits
   - [Production](https://calculator.digital.mass.gov/ui/parttimebenefits)
   - [Development](https://calculator.digital.mass.gov/dev/ui/parttimebenefits)
