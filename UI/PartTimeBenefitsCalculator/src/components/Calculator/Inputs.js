@@ -11,7 +11,7 @@ const inputCurrencyProps = {
   min: 0,
   showButtons: false,
   format: {
-    mantissa: 0,
+    mantissa: 2,
     trimMantissa: false,
     thousandSeparated: true
   }
@@ -26,7 +26,6 @@ export const QuestionOne = (props) => {
       name="weekly-benefits"
       max={795}
       onChange={handleChange}
-      onBlur={(val) => handleChange(val, 'weekly-benefits')}
       {...inputCurrencyProps}
     />
   );
