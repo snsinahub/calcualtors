@@ -25,7 +25,7 @@ The following sections explain the inputs, and the calculations uses to generate
 
 ### 1. Weekly benefit amount (`weeklyBenefits`)
 
-This input is capped at the maximum `$795`. If the user inputs any value larger than `$795`, two things will happen: (1) the input value will automatically be set to `$795`, and they will see an error message explaining that the maximum is `$795`. In technical terms, an input validation along with a message output will be rendered and onBlur the value will be set to the maximum.
+This input is capped at the maximum `$823`. If the user inputs any value larger than `$823`, two things will happen: (1) the input value will automatically be set to `$823`, and they will see an error message explaining that the maximum is `$823`. In technical terms, an input validation along with a message output will be rendered and onBlur the value will be set to the maximum.
 
 *Image 2: Example of the error message*
 ![sample input 1 exceeds maximum screenshot](./media/input1-validation.png)
@@ -48,6 +48,8 @@ Earnings exclusion is calculated based on the weekly benefit amount (`weeklyBene
 ```
 const earningsDisregardCalc = (weeklyBenefits * (1 / 3));
 ```
+Note that we are rounding the `earningsdisregard` to two decimal places. 
+
 *Image 3: Earning exclusion calculation in the calculator*
 ![sample output 2 screenshot](./media/output1.png)
 
