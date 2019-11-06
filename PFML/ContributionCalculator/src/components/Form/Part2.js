@@ -162,12 +162,13 @@ const Part2 = (props) => {
                             triggerText={[`<strong>${toCurrency(famCompPayment + medCompPayment)}</strong>`]}
                             id="help-tip-total-ann-cont"
                             theme="c-white"
+                            bypassMobileStyle={process.env.REACT_APP_IFRAME !== 'false'}
                             helpText={over25 ? (
                               // over 25 total medLeave calculation
                               [`${toCurrency(famCompPayment + medCompPayment)} = ${toCurrency(totalPayroll)} X ${toPercentage(totalPercent, 2)}`]
                             ) : (
                               // under 25 total medLeave calculation
-                              [`${toCurrency(famCompPayment + medCompPayment)} = (${toCurrency(totalPayroll)} X ${toPercentage(famPercent, 2)}) + (${toCurrency(totalPayroll)} X ${toPercentage(medPercent, 2)} X ${empMedContPercent})`]
+                              [`${toCurrency(famCompPayment + medCompPayment)} = (${toCurrency(totalPayroll)} X ${toPercentage(famPercent, 5)}) + (${toCurrency(totalPayroll)} X ${toPercentage(medPercent, 5)} X ${empMedContPercent})`]
                             )
                             }
                           />
@@ -177,12 +178,13 @@ const Part2 = (props) => {
                               triggerText={[`<strong>${toCurrency(famPercent * totalPayroll)}</strong>`, `<strong>${toCurrency(medPercent * totalPayroll * medPayrollPercent)}</strong>`]}
                               id="help-tip-medfam-ann-cont"
                               theme="c-white"
+                              bypassMobileStyle={process.env.REACT_APP_IFRAME !== 'false'}
                             >
                               <div className="ma__help-text">
-                                Family Leave: {toCurrency(famPercent * totalPayroll)} = {toCurrency(totalPayroll)} X {toPercentage(famPercent, 2)}
+                                Family Leave: {toCurrency(famPercent * totalPayroll)} = {toCurrency(totalPayroll)} X {toPercentage(famPercent, 5)}
                               </div>
                               <div className="ma__help-text">
-                                Medical Leave: {toCurrency(medPercent * totalPayroll * medPayrollPercent)} = {toCurrency(totalPayroll)} X { over25 ? toPercentage(medPercent, 2) : <span>{toPercentage(medPercent, 2)} X {empMedContPercent}</span>}
+                                Medical Leave: {toCurrency(medPercent * totalPayroll * medPayrollPercent)} = {toCurrency(totalPayroll)} X { over25 ? toPercentage(medPercent, 5) : <span>{toPercentage(medPercent, 5)} X {empMedContPercent}</span>}
                               </div>
                             </HelpTip>
                           </p>
@@ -242,20 +244,22 @@ const Part2 = (props) => {
                                 [`Total Contribution: ${toCurrency(famPayment + medPayment)} = ${toCurrency(payrollWagesCap)} X ${toPercentage(totalPercent, 2)}`]
                               ) : (
                                 // under 25 total medLeave calculation
-                                [`Total Contribution: ${toCurrency(famPayment + medPayment)} = (${toCurrency(payrollWagesCap)} X ${toPercentage(famPercent, 2)}) + (${toCurrency(payrollWagesCap)} X ${toPercentage(medPercent, 2)} X ${empMedContPercent})`]
+                                [`Total Contribution: ${toCurrency(famPayment + medPayment)} = (${toCurrency(payrollWagesCap)} X ${toPercentage(famPercent, 5)}) + (${toCurrency(payrollWagesCap)} X ${toPercentage(medPercent, 5)} X ${empMedContPercent})`]
                               )
                               }
                               theme="c-white"
+                              bypassMobileStyle={process.env.REACT_APP_IFRAME !== 'false'}
                             />
                             <HelpTip
                               text={`Of this amount, <strong>${toCurrency(famPayment)}</strong> is for family leave. and <strong>${toCurrency(medPayment)}</strong> is for medical leave.`}
                               triggerText={[`<strong>${toCurrency(famPayment)}</strong>`, `<strong>${toCurrency(medPayment)}</strong>`]}
                               id="help-tip-medfam-emp-ann-cont"
                               theme="c-white"
+                              bypassMobileStyle={process.env.REACT_APP_IFRAME !== 'false'}
                             >
-                              <div className="ma__help-text">Family Leave: {toCurrency(famPayment)} = {toCurrency(payrollWagesCap)} X {toPercentage(famPercent, 2)}
+                              <div className="ma__help-text">Family Leave: {toCurrency(famPayment)} = {toCurrency(payrollWagesCap)} X {toPercentage(famPercent, 5)}
                               </div>
-                              <div className="ma__help-text">Medical Leave: {toCurrency(medPayment)} = {toCurrency(payrollWagesCap)} X { over25 ? toPercentage(medPercent, 2) : <span>{toPercentage(medPercent, 2)} X {empMedContPercent}</span>}
+                              <div className="ma__help-text">Medical Leave: {toCurrency(medPayment)} = {toCurrency(payrollWagesCap)} X { over25 ? toPercentage(medPercent, 5) : <span>{toPercentage(medPercent, 5)} X {empMedContPercent}</span>}
                               </div>
                             </HelpTip>
                           </p>
