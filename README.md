@@ -1,16 +1,16 @@
 # Calculators
 Code base for calculator UIs.
-- PFML Benefits
+- PFML Benefits Calculator
   - [Production](https://calculator.digital.mass.gov/pfml/yourbenefits)
   - [Development](https://calculator.digital.mass.gov/dev/pfml/yourbenefits)
-- PFML Contribution Production
+- PFML Contribution Calculator
   - [Production](https://calculator.digital.mass.gov/pfml/contribution)
   - [Development](https://calculator.digital.mass.gov/dev/pfml/contribution)
-- UI Benefits
+- UI Benefits Calculator
   - [Production](https://calculator.digital.mass.gov/ui/yourbenefits)
   - [Development](https://calculator.digital.mass.gov/dev/ui/yourbenefits)
   - [Testing](https://calculator.digital.mass.gov/forreview/ui/yourbenefits)
-- UI Part-time Benefits
+- UI Part-time Benefits Calculator
   - [Production](https://calculator.digital.mass.gov/ui/parttimebenefits)
   - [Development](https://calculator.digital.mass.gov/dev/ui/parttimebenefits)
   - [Testing](https://calculator.digital.mass.gov/forreview/ui/parttimebenefits)
