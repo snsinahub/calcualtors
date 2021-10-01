@@ -322,36 +322,28 @@ workflows:
   deploy-dev:
     jobs:
       - pfml-cal-benefits-deploy-dev:
-          context: aws
           filters:
             branches: { only: develop }
       - pfml-cal-contribution-deploy-dev:
-          context: aws
           filters:
             branches: { only: develop }
       - ui-cal-benefits-deploy-dev:
-          context: aws
           filters:
             branches: { only: develop }
       - ui-cal-parttime-deploy-dev:
-          context: aws
           filters:
             branches: { only: develop }
   deploy-prod:
     jobs:
       - pfml-cal-benefits-deploy-prod:
-          context: aws
           filters:
             branches: { only: master }
       - pfml-cal-contribution-deploy-prod:
-          context: aws
           filters:
             branches: { only: master }
       - ui-cal-benefits-deploy-prod:
-          context: aws
           filters:
             branches: { only: master }
       - ui-cal-parttime-deploy-prod:
-          context: aws
           filters:
             branches: { only: master }
