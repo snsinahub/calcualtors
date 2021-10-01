@@ -2,19 +2,21 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 
-version: 2
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
 
 references:
   install_global_packages: &install_global_packages
     run: {name: 'Install global packages', command: 'npm install'}
-  install_aws: &install_aws
-    run: {name: 'Install awscli', command: 'sudo apt-get install python3-dev python-pip3 && sudo pip install awscli'}
+
 
 defaults: &defaults
     docker:
       - image: circleci/node:10.10.0
     parallelism: 2
     working_directory: ~/repo
+    executor: aws-cli/default
 
 jobs:
   # Test jobs for validating calculor code on all branches.
@@ -86,7 +88,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "PFML/BenefitsCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'PFML Benefits Calculator Install Packages'
@@ -110,7 +112,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "PFML/ContributionCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'PFML Contribution Calculator Install Packages'
@@ -134,7 +136,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "UI/BenefitsCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'UI Benefits Calculator Install Packages'
@@ -158,7 +160,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "UI/PartTimeBenefitsCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'UI Part Time Benefits Calculator Install Packages'
@@ -183,7 +185,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "PFML/BenefitsCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'PFML Benefits Calculator Install Packages'
@@ -214,7 +216,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "PFML/ContributionCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'PFML Contribution Calculator Install Packages'
@@ -245,7 +247,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "UI/BenefitsCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'UI Benefits Calculator Install Packages'
@@ -276,7 +278,7 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "UI/PartTimeBenefitsCalculator/package.json" }}
-      - *install_aws
+      - aws-cli/setup
       - *install_global_packages
       - run:
           name: 'UI Part Time Benefits Calculator Install Packages'
@@ -320,28 +322,36 @@ workflows:
   deploy-dev:
     jobs:
       - pfml-cal-benefits-deploy-dev:
+          context: aws
           filters:
             branches: { only: develop }
       - pfml-cal-contribution-deploy-dev:
+          context: aws
           filters:
             branches: { only: develop }
       - ui-cal-benefits-deploy-dev:
+          context: aws
           filters:
             branches: { only: develop }
       - ui-cal-parttime-deploy-dev:
+          context: aws
           filters:
             branches: { only: develop }
   deploy-prod:
     jobs:
       - pfml-cal-benefits-deploy-prod:
+          context: aws
           filters:
             branches: { only: master }
       - pfml-cal-contribution-deploy-prod:
+          context: aws
           filters:
             branches: { only: master }
       - ui-cal-benefits-deploy-prod:
+          context: aws
           filters:
             branches: { only: master }
       - ui-cal-parttime-deploy-prod:
+          context: aws
           filters:
             branches: { only: master }
