@@ -8,7 +8,7 @@ references:
   install_global_packages: &install_global_packages
     run: {name: 'Install global packages', command: 'npm install'}
   install_aws: &install_aws
-    run: {name: 'Install awscli', command: 'sudo apt-get install python-dev python-pip && sudo pip install awscli'}
+    run: {name: 'Install awscli', command: 'sudo apt-get install python-dev python-pip && sudo pip install awscli==1.20.8'}
 
 defaults: &defaults
     docker:
