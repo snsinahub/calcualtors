@@ -10,13 +10,13 @@ The main logic of the calculator lives in these files:
 ## Variable constants
 There are 4 variables that are constants. Here are their values:
 ```
-maxBenefitDuration = 26
+maxBenefitDuration = 30
 quartersSumThreshhold = 5400
 weeklyBenefitMax = 823
 maxBenefitRatio = 0.36
 ```
 
-To change max benefit duration from 26 weeks to 30 weeks, change `maxBenefitDuration` in [Variables](../src/data/variables.json) to `30`.
+To change max benefit duration from 26 weeks to 30 weeks (or back), change `maxBenefitDuration` in [Variables](../src/data/variables.json) to `30` (or `26`).
 > This variable will impact the formula of calculating the maxBenefit total and hence the benefits duration outcome.
 
 ## Inputs
