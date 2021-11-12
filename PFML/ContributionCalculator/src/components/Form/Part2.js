@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import numbro from 'numbro';
 import { InputCurrency, InputRadioGroup, CalloutAlert, Collapse, HelpTip, FormContext, Paragraph } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
-import ContributionVariables from '../../data/ContributionVariables.json';
 import PartTwoProps from '../../data/PartTwo.json';
-import { toCurrency, toPercentage } from '../../utils';
+import { toCurrency, toPercentage, getVarsFromLeaveDate } from '../../utils';
 
 import '../../css/index.css';
 
@@ -21,10 +20,6 @@ const mapUrlChangeHandlersToProps = () => ({
 });
 
 const Part2 = (props) => {
-  // Base variables provided in the base variable json.
-  const {
-    totContribution, totMedPercent, totFamPercent, socialSecCap, empMedCont, largeCompMedCont
-  } = ContributionVariables.baseVariables;
   const {
     questionOne, questionTwo, questionThree, questionFour, under25MedContDisclaimer
   } = PartTwoProps;
@@ -36,6 +31,7 @@ const Part2 = (props) => {
       {
           (context) => {
             const {
+              year,
               over25,
               over50per,
               employeeCount,
@@ -45,6 +41,10 @@ const Part2 = (props) => {
                 payrollW2, payroll1099, payrollWages, employeesW2
               }
             } = context;
+            // Base variables provided in the base variable json.
+            const {
+              totContribution, totMedPercent, totFamPercent, socialSecCap, empMedCont, largeCompMedCont
+            } = getVarsFromLeaveDate({ yearString: year });
             const medPercent = Math.round(totContribution * totMedPercent * 1e4) / 1e4;
             const medPayrollPercent = over25 ? (largeCompMedCont + empMedCont) : empMedCont;
             const famPercent = Math.round(totContribution * totFamPercent * 1e4) / 1e4;

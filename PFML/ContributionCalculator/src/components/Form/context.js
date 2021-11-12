@@ -9,6 +9,7 @@ export const defaultState = {
     payroll1099: 0,
     payrollWages: 0
   },
+  year: '',
   medLeaveCont: 0,
   famLeaveCont: 0,
   timePeriod: 'Year',

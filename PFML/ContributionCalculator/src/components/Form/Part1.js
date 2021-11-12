@@ -2,9 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { InputRadioGroup, CalloutAlert, InputNumber, Collapse, Paragraph, FormContext } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
-import ContributionVariables from '../../data/ContributionVariables.json';
+import { getHelpTip, getVarsFromLeaveDate } from '../../utils';
 import PartOneProps from '../../data/PartOne.json';
-import { getHelpTip } from '../../utils';
 
 import '../../css/index.css';
 
@@ -20,10 +19,6 @@ const mapUrlChangeHandlersToProps = () => ({
 });
 
 const Part1 = (props) => {
-  // Base variables provided in the base variable json.
-  const {
-    minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
-  } = ContributionVariables.baseVariables;
   const {
     questionOne, questionTwo, questionThree, output
   } = PartOneProps;
@@ -37,6 +32,7 @@ const Part1 = (props) => {
       {
           (context) => {
             const {
+              year,
               over25,
               over50per,
               hasMassEmployees,
@@ -44,6 +40,10 @@ const Part1 = (props) => {
                 employeesW2, employees1099
               }
             } = context;
+            // Base variables provided in the base variable json.
+            const {
+              minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
+            } = getVarsFromLeaveDate({ yearString: year });
             let outputMessage;
             if (over25 && over50per) {
               outputMessage = (
@@ -162,7 +162,7 @@ const Part1 = (props) => {
                   min={0}
                   defaultValue={employeesW2 ? Number(employeesW2) : null}
                   required
-                  unit=""
+                  unit={null}
                   onChange={(e, inputValue) => {
                     const empW2 = Number(inputValue) > 0 ? Number(inputValue) : 0;
                     const value = { ...context.value };
@@ -197,7 +197,7 @@ const Part1 = (props) => {
                   min={0}
                   defaultValue={employees1099 ? Number(employees1099) : null}
                   required
-                  unit=""
+                  unit={null}
                   onChange={(e, inputValue) => {
                     const emp1099 = Number(inputValue) > 0 ? Number(inputValue) : 0;
                     // Pull value from form for updating.

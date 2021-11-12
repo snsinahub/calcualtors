@@ -4,8 +4,7 @@ import TagManager from 'react-gtm-module';
 import numbro from 'numbro';
 import { SelectBox, Input, InputSlider, InputNumber, FormContext, Table } from '@massds/mayflower-react';
 import { encode, addUrlProps, UrlQueryParamTypes, replaceInUrlQuery } from 'react-url-query';
-import { toCurrency, getHelpTip } from '../../utils';
-import ContributionVariables from '../../data/ContributionVariables.json';
+import { toCurrency, getHelpTip, getVarsFromLeaveDate } from '../../utils';
 import PartThreeProps from '../../data/PartThree.json';
 import AllTableData from '../../data/AllTable.data';
 import SingleTableData from '../../data/SingleTable.data';
@@ -25,10 +24,6 @@ const mapUrlChangeHandlersToProps = () => ({
 });
 
 const Part3 = (props) => {
-  // Base variables provided in the base variable json.
-  const {
-    totContribution, totMedPercent, totFamPercent, largeCompFamCont, smallCompFamCont, empMedCont, largeCompMedCont, smallCompMedCont, socialSecCap
-  } = ContributionVariables.baseVariables;
   const { questionOne, questionTwo } = PartThreeProps;
   const {
     onChangeMedCont, onChangeFamCont, onChangeTimeValue, onChangeTimePeriod
@@ -38,6 +33,7 @@ const Part3 = (props) => {
       {
           (context) => {
             const {
+              year,
               over25,
               over50per,
               employeeCount,
@@ -53,7 +49,10 @@ const Part3 = (props) => {
                 payrollW2, payroll1099, payrollWages, employeesW2, employees1099
               }
             } = context;
-
+            // Base variables provided in the base variable json.
+            const {
+              totContribution, totMedPercent, totFamPercent, largeCompFamCont, smallCompFamCont, empMedCont, largeCompMedCont, smallCompMedCont, socialSecCap
+            } = getVarsFromLeaveDate({ yearString: year });
             // The medical leave contribution percent
             const medPercent = Math.round(totContribution * totMedPercent * 1e4) / 1e4;
             // The family leave contribution percent

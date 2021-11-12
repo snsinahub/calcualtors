@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { decode, addUrlProps, UrlQueryParamTypes } from 'react-url-query';
 import { FormContext } from '@massds/mayflower-react';
-import ContributionVariables from '../../data/ContributionVariables.json';
+import { getValidYear, getVarsFromLeaveDate } from '../../utils';
+import Part0 from '../Form/Part0';
 import Part1 from '../Form/Part1';
 import Part2 from '../Form/Part2';
 import Part3 from '../Form/Part3';
@@ -25,19 +26,23 @@ const mapUrlToProps = (url) => ({
   medCont: decode(UrlQueryParamTypes.number, url.medCont),
   famCont: decode(UrlQueryParamTypes.number, url.famCont),
   timeValue: decode(UrlQueryParamTypes.string, url.timeValue),
-  timePeriod: decode(UrlQueryParamTypes.string, url.timePeriod)
+  timePeriod: decode(UrlQueryParamTypes.string, url.timePeriod),
+  year: decode(UrlQueryParamTypes.string, url.year)
 });
 
-const {
-  minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
-} = ContributionVariables.baseVariables;
 
 class ExampleForm extends Component {
   constructor(props) {
     super(props);
+    // Get props from decoding the URL parameters
     const {
-      massEmp, w2, emp1099, option, payW2, pay1099, payWages, timeValue, timePeriod, famCont, medCont
+      massEmp, w2, emp1099, option, payW2, pay1099, payWages, timeValue, timePeriod, famCont, medCont, year
     } = this.props;
+    // Get vars based on the year decoded from the URL year parameter
+    const {
+      minEmployees, largeCompMedCont, smallCompMedCont, largeCompFamCont, smallCompFamCont, emp1099Fraction
+    } = getVarsFromLeaveDate({ yearString: getValidYear(year) });
+
     const over50per = (Number(emp1099) / (Number(w2) + Number(emp1099))) > emp1099Fraction;
     const employeeCount = over50per ? (Number(w2) + Number(emp1099)) : Number(w2);
     const over25 = employeeCount >= minEmployees;
@@ -49,7 +54,7 @@ class ExampleForm extends Component {
     /* eslint-disable react/no-unused-state */
     this.state = {
       isActive: true,
-
+      year: getValidYear(year),
       value: {
         employeesW2: getDefaultNumber(w2),
         employees1099: getDefaultNumber(emp1099),
@@ -82,6 +87,7 @@ class ExampleForm extends Component {
       <form className="ma__form-page">
         <FormContext.Provider value={this.state}>
           <div className="page-content">
+            <Part0 />
             <Part1 />
             <hr />
             <Part2 />
@@ -96,6 +102,7 @@ class ExampleForm extends Component {
 }
 
 ExampleForm.propTypes = {
+  year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   massEmp: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   w2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   emp1099: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
