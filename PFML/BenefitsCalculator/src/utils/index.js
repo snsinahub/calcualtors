@@ -1,6 +1,7 @@
 import React from 'react';
 import numbro from 'numbro';
 import { HelpTip } from '@massds/mayflower-react';
+import BenefitsVariables from '../data/BenefitsVariables.json';
 
 // eslint-disable-next-line import/prefer-default-export
 export const getHelpTip = (question, theme, key) => (
@@ -44,4 +45,55 @@ export const toBoolean = (string) => {
     return(string === 'true');
   }
   return string;
+};
+
+export const years = Object.keys(BenefitsVariables.baseVariables);
+
+export const getVarsFromLeaveDate = ({ dateString, yearString }) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear() || yearString;
+  const variables = BenefitsVariables.baseVariables[year];
+  return variables;
+};
+
+
+export const parseDate = ({ date, separator }) => {
+  const dateObj = date || new Date(); // Default to today's date
+  const sp = separator || '-'; // Default to - as separator
+  let dd = dateObj.getDate();
+  let mm = dateObj.getMonth() + 1; // As January is 0.
+  const yyyy = dateObj.getFullYear();
+
+  if (dd < 10) dd = `0${dd}`;
+  if (mm < 10) mm = `0${mm}`;
+  return{
+    day: dd,
+    month: mm,
+    year: yyyy,
+    date: mm + sp + dd + sp + yyyy
+  };
+};
+
+export const formDate = ({
+  day, month, year, separator
+}) => {
+  let dd = day;
+  let mm = month;
+  const yyyy = year;
+  const sp = separator || '-'; // Default to - as separator
+
+  if (dd < 10) dd = `0${dd}`;
+  if (mm < 10) mm = `0${mm}`;
+  return(mm + sp + dd + sp + yyyy);
+};
+
+export const monthLookup = ({ month, monthValue, options }) => {
+  if (month) {
+    const found = options.find((m) => m.text === month);
+    return found.value;
+  } if (monthValue) {
+    const found = options.find((m) => m.value === monthValue);
+    return found.text;
+  }
+  return null;
 };

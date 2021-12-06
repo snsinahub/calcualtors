@@ -16,13 +16,12 @@ class LeaveType extends Component {
   constructor(props) {
     super(props);
     const {
-      message, theme, weeks, startDate
+      message, theme, weeks
     } = this.getLeaveType(leaveTypeData, props.defaultSelected) || {};
     this.state = {
       message,
       theme,
-      weeks,
-      startDate
+      weeks
     };
   }
 
@@ -30,13 +29,12 @@ class LeaveType extends Component {
 
   handleChange = ({ selected, event }) => {
     const {
-      message, theme, weeks, startDate
+      message, theme, weeks
     } = this.getLeaveType(leaveTypeData, selected);
     this.setState({
       message,
       theme,
-      weeks,
-      startDate
+      weeks
     });
     const { onChange } = this.props;
     if (typeof onChange === 'function') {
@@ -59,7 +57,7 @@ class LeaveType extends Component {
     };
 
     const {
-      message, theme, weeks, startDate
+      message, theme, weeks
     } = this.state;
     const open = !!weeks;
     const callProps = {
@@ -73,7 +71,6 @@ class LeaveType extends Component {
     const totalBenefit = calcTotalBenefit({ benefitDuration: weeks, weeklyBenefit });
     const approvedMessage = `If approved, you may be covered <strong>up to ${weeks} weeks</strong> by the PFML program. Your maximum benefit credit is estimated to be <strong>${toCurrency(totalBenefit)}</strong>.`;
     const totalFormulaDescription = 'Your maximum benefit credit is equal to your estimated weekly benefit multiplied by the number of paid weeks (the first 7 days of your leave is a waiting period which is unpaid):';
-    const startDateDisclaimer = `This benefit will be available starting <strong>${startDate}</strong>.`;
 
     const getHelpText = () => (
       <div className="ma__help-text">
@@ -110,9 +107,6 @@ class LeaveType extends Component {
                       >
                         {getHelpText()}
                       </HelpTip>
-                      <Paragraph>
-                        {startDateDisclaimer}
-                      </Paragraph>
                       <hr />
                       <Button
                         usage="secondary"

@@ -28,20 +28,7 @@ class Calculator extends Component {
         quarter4: ''
       }
     };
-    const format = 'MMM YYYY';
-    const quarterCurrent = moment().quarter();
-    const quarterDateRange = (quartersAgo) => {
-      const quarter = quarterCurrent - quartersAgo;
-      let qEnd = moment().quarter(quarter).endOf('quarter');
-      let qStart = moment().quarter(quarter).startOf('quarter');
-      qEnd = moment(qEnd).format(format);
-      qStart = moment(qStart).format(format);
-      return{ qEnd, qStart };
-    };
-    this.q1 = quarterDateRange(1);
-    this.q2 = quarterDateRange(2);
-    this.q3 = quarterDateRange(3);
-    this.q4 = quarterDateRange(4);
+
     this.inputCurrencyProps = {
       placeholder: 'e.g. $10,000',
       format: {
@@ -56,6 +43,17 @@ class Calculator extends Component {
     };
   }
 
+  quarterDateRange = ({ date, quartersAgo }) => {
+    const format = 'MMM YYYY';
+    const quarterCurrent = moment(date).quarter();
+    const quarter = quarterCurrent - quartersAgo;
+    let qEnd = moment(date).quarter(quarter).endOf('quarter');
+    let qStart = moment(date).quarter(quarter).startOf('quarter');
+    qEnd = moment(qEnd).format(format);
+    qStart = moment(qStart).format(format);
+    return{ qEnd, qStart };
+  };
+
   onSubmit = ({
     quarter1, quarter2, quarter3, quarter4
   }) => {
@@ -65,8 +63,17 @@ class Calculator extends Component {
     const { quartersHaveValue, quartersCount } = paidQuarters(quartersArray);
 
     const weeklyPay = calcWeeklyPay({ quartersHaveValue, quartersCount });
-    const weeklyBenefit = calcWeeklyBenefit(weeklyPay);
-    const { qualified } = calcEligibility({ weeklyBenefit, quartersHaveValue });
+
+    const {
+      vars: {
+        maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction, quartersSumThreshhold
+      }
+    } = this.props;
+
+    const weeklyBenefit = calcWeeklyBenefit({
+      weeklyPay, maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction
+    });
+    const { qualified } = calcEligibility({ weeklyBenefit, quartersHaveValue, quartersSumThreshhold });
 
     const { onSubmit } = this.props;
     const { submitted } = this.state;
@@ -95,7 +102,14 @@ class Calculator extends Component {
       values
     } = this.state;
 
+    const { date, vars } = this.props;
+
     const { inputLabel, applyAllLabel } = inputProps;
+
+    const q1 = this.quarterDateRange({ date, quartersAgo: 1 });
+    const q2 = this.quarterDateRange({ date, quartersAgo: 2 });
+    const q3 = this.quarterDateRange({ date, quartersAgo: 3 });
+    const q4 = this.quarterDateRange({ date, quartersAgo: 4 });
 
     return(
       <FormProvider>
@@ -105,7 +119,7 @@ class Calculator extends Component {
             <Fragment>
               <InputCurrency
                 {... this.inputCurrencyProps}
-                labelText={`${this.q1.qStart} – ${this.q1.qEnd} ${inputLabel}`}
+                labelText={`${q1.qStart} – ${q1.qEnd} ${inputLabel}`}
                 id="quarter1"
                 name="quarter1"
                 onBlur={(val, { id }) => {
@@ -146,7 +160,7 @@ class Calculator extends Component {
               />
               <InputCurrency
                 {... this.inputCurrencyProps}
-                labelText={`${this.q2.qStart} – ${this.q2.qEnd} ${inputLabel}`}
+                labelText={`${q2.qStart} – ${q2.qEnd} ${inputLabel}`}
                 id="quarter2"
                 name="quarter2"
                 disabled={applyAll}
@@ -159,7 +173,7 @@ class Calculator extends Component {
               />
               <InputCurrency
                 {... this.inputCurrencyProps}
-                labelText={`${this.q3.qStart} – ${this.q3.qEnd} ${inputLabel}`}
+                labelText={`${q3.qStart} – ${q3.qEnd} ${inputLabel}`}
                 id="quarter3"
                 name="quarter3"
                 disabled={applyAll}
@@ -172,7 +186,7 @@ class Calculator extends Component {
               />
               <InputCurrency
                 {... this.inputCurrencyProps}
-                labelText={`${this.q4.qStart} – ${this.q4.qEnd} ${inputLabel}`}
+                labelText={`${q4.qStart} – ${q4.qEnd} ${inputLabel}`}
                 id="quarter4"
                 name="quarter4"
                 disabled={applyAll}
@@ -198,7 +212,7 @@ class Calculator extends Component {
           {
           () => (
             submitted && (
-              <Output {...values} />
+              <Output {...values} vars={vars} />
             )
           )
         }

@@ -7,7 +7,6 @@ import Paragraph from '@massds/mayflower-react/es/components/atoms/text/Paragrap
 import {
   toCurrency, toPercentage, sum, getIframeProps
 } from '../../utils';
-import BenefitsVariables from '../../data/BenefitsVariables.json';
 import wagesInputData from '../../data/wagesOutput.json';
 import {
   buildQuartersArray, paidQuarters, calcWeeklyPay, calcWeeklyBenefit, calcEligibility
@@ -15,11 +14,9 @@ import {
 
 const Output = (props) => {
   const {
-    maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction, quartersSumThreshhold
-  } = BenefitsVariables.baseVariables;
-
-  const {
-    quarter1, quarter2, quarter3, quarter4
+    quarter1, quarter2, quarter3, quarter4, vars: {
+      maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction, quartersSumThreshhold
+    }
   } = props;
 
   const quartersArray = buildQuartersArray({
@@ -28,8 +25,10 @@ const Output = (props) => {
   const { quartersHaveValue, quartersCount } = paidQuarters(quartersArray);
 
   const weeklyPay = calcWeeklyPay({ quartersHaveValue, quartersCount });
-  const weeklyBenefit = calcWeeklyBenefit(weeklyPay);
-  const { qualified, qualification1 } = calcEligibility({ weeklyBenefit, quartersHaveValue });
+  const weeklyBenefit = calcWeeklyBenefit({
+    weeklyPay, maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction
+  });
+  const { qualified, qualification1 } = calcEligibility({ weeklyBenefit, quartersHaveValue, quartersSumThreshhold });
 
   const helpTextBasePeriod2Q = '*Your <b>average weekly income</b> equals to the sum of total wages for the 2 highest-earning quarters divided by the number of weeks in the combined quarters:';
   const helpTextBasePeriod1Q = '*Your <b>average weekly income</b> equals to the highest-earning quarter divided by the number of weeks in the quarter:';
@@ -54,8 +53,11 @@ const Output = (props) => {
   // qualifications
   const quartersSum = quartersHaveValue.length > 0 && quartersHaveValue.reduce(sum);
 
-  const qualifyAddition = 'Choose a reason of leave to determine if you will be eligible and estimate for the duration of your benefit.';
-  const helpTextDisqualification1 = `You must have earned at least ${toCurrency(quartersSumThreshhold)} during the last 4 completed calendar quarters to be eligible.`;
+  const qualifyAddition = 'Choose a reason for leave to determine if you will be eligible and estimate for the duration of your benefit.';
+
+  // hack to get this update published
+  let helpTextDisqualification1 = `You must have earned at least ${toCurrency(quartersSumThreshhold)} during the last 4 completed calendar quarters to be eligible.`;
+  helpTextDisqualification1 = 'You must have earned at least $5,400.00 in 2021 or $5,700 in 2022 during the last 4 completed calendar quarters to be eligible.';
   const helpTextDisqualification2 = `Your total base period wages of ${toCurrency(quartersSum)} must be equal to or greater than ${toCurrency(weeklyBenefit * 30)} (your weekly benefit amount x 30) to be eligible.`;
 
 
@@ -119,7 +121,7 @@ const Output = (props) => {
           <HelpTip
             theme="c-white"
             text={`Based on the information you provided, you may be eligible to receive
-              <strong>${toCurrency(weeklyBenefit)}</strong> weekly from the PFML benefits.`}
+              <strong>${toCurrency(weeklyBenefit)}</strong> weekly in PFML benefits. Please remember this is just an estimate.`}
             triggerText={[`<strong>${toCurrency(weeklyBenefit)}</strong>`]}
             id="help-tip-benefits"
             labelID="help-tip-benefits-label"

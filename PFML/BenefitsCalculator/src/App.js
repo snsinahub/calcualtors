@@ -12,19 +12,25 @@ import FooterData from './data/Footer.data';
 import SocialLinksLiveData from './data/SocialLinksLive.json';
 import LeaveType from './components/LeaveType';
 import WagesInput from './components/WagesInput';
+import DateInput from './components/DateInput';
 import BenefitsVariables from './data/BenefitsVariables.json';
 import inputProps from './data/wagesInput.json';
+import { formDate, getVarsFromLeaveDate, parseDate } from './utils';
 
 import './index.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    const today = new Date();
+    this.today = parseDate(today);
     /* eslint-disable no-undef */
     this.state = {
       qualified: false,
       weeklyBenefit: null,
-      leaveReason: ''
+      leaveReason: '',
+      year: `${today.getFullYear()}`,
+      date: this.today.date
     };
     /* eslint-enable react/no-unused-state */
     this.footerProps = {
@@ -41,6 +47,13 @@ class App extends Component {
     };
   }
 
+  handleDateChange = ({ day, month, year }) => {
+    this.setState({
+      year,
+      date: formDate({ day, month, year })
+    });
+  };
+
   handleWagesSubmit = ({ qualified, weeklyBenefit }) => {
     this.setState({
       qualified,
@@ -56,7 +69,7 @@ class App extends Component {
 
   render() {
     const {
-      leaveReason, weeklyBenefit, qualified
+      leaveReason, weeklyBenefit, qualified, year, date
     } = this.state;
 
     const leaveTypeProps = {
@@ -78,10 +91,12 @@ class App extends Component {
       </h2>
     );
 
+
     return(
       <div className="App">
         {process.env.REACT_APP_IFRAME === 'true' ? (
           <div className="page-content">
+            <DateInput onSubmit={this.handleDateChange} today={this.today} />
             <hr />
             {getHelpTip()}
             <WagesInput onSubmit={this.handleWagesSubmit} />
@@ -101,10 +116,10 @@ class App extends Component {
               />
               <section className="main-content main-content--two">
                 <div className="page-content">
+                  <DateInput onSubmit={this.handleDateChange} today={this.today} />
                   <hr />
                   {getHelpTip()}
-
-                  <WagesInput onSubmit={this.handleWagesSubmit} />
+                  <WagesInput onSubmit={this.handleWagesSubmit} vars={getVarsFromLeaveDate({ yearString: year })} date={date} />
                   <LeaveType {...leaveTypeProps} />
                   <hr />
                   {process.env.REACT_APP_IFRAME === 'false' && (

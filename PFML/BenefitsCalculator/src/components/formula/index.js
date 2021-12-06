@@ -1,12 +1,6 @@
 import numbro from 'numbro';
 import { sum } from '../../utils';
 
-import BenefitsVariables from '../../data/BenefitsVariables.json';
-
-const {
-  maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction, quartersSumThreshhold
-} = BenefitsVariables.baseVariables;
-
 export const buildQuartersArray = ({
   quarter1, quarter2, quarter3, quarter4
 }) => {
@@ -32,20 +26,22 @@ export const calcWeeklyPay = ({ quartersHaveValue, quartersCount }) => {
   }
   const topQuartersSum = topQuarters && topQuarters.length > 0 && topQuarters.reduce(sum);
   // average weekly pay is rounded up to the nearest dollar
-  const avgWeeklyPay = Math.ceil(topQuartersSum / weeksInTopQuarters);
-  return avgWeeklyPay;
+  const weeklyPay = Math.ceil(topQuartersSum / weeksInTopQuarters);
+  return weeklyPay;
 };
 
-export const calcWeeklyBenefit = (avgWeeklyPay) => {
+export const calcWeeklyBenefit = ({
+  weeklyPay, maAvgWeek, maxBenefitWeek, lowBenefitFraction, highBenefitFraction
+}) => {
   const benefitBreakWeek = maAvgWeek * 0.5;
   // // The estimated weekly benefit you would receive.
-  const weeklyBenefit = Math.min(maxBenefitWeek, (lowBenefitFraction * Math.min(avgWeeklyPay, benefitBreakWeek)) + (highBenefitFraction * Math.max(avgWeeklyPay - benefitBreakWeek, 0)));
+  const weeklyBenefit = Math.min(maxBenefitWeek, (lowBenefitFraction * Math.min(weeklyPay, benefitBreakWeek)) + (highBenefitFraction * Math.max(weeklyPay - benefitBreakWeek, 0)));
   // // The estimated total benefit you can receive based on the number of weeks you are covered.
   // // const totBenefit = weeklyBenefit * maxWeeks;
   return weeklyBenefit;
 };
 
-export const calcEligibility = ({ weeklyBenefit, quartersHaveValue }) => {
+export const calcEligibility = ({ weeklyBenefit, quartersHaveValue, quartersSumThreshhold }) => {
   // qualifications
   const quartersSum = quartersHaveValue.length > 0 && quartersHaveValue.reduce(sum);
   // qualification 1: total wages is no less than the threshhold

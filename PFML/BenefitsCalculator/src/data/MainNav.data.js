@@ -232,7 +232,7 @@ const mainNav = [
     ]
   },
   {
-    "href": "https://www.mass.gov/info-details/covid-19-updates-and-information",
+    "href": "https://www.mass.gov/covid-19-updates-and-information",
     "text": "COVID-19",
     "active": false,
     "subNav": []

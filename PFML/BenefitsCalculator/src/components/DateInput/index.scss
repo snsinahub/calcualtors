@@ -1,0 +1,22 @@
+.date-input-group {
+  display: flex;
+  & > * {
+    margin: 0 .25rem 0 0;
+  }
+
+  & > .ma__input-group:not(:first-child) {
+    margin: 0 .25rem 0 0;
+  }
+
+  @media (max-width: 380px) {
+    flex-direction: column;
+    & > * {
+      margin-right: 0;
+    }
+  }
+}
+
+.ma__input-number__control {
+  padding-left: 0;
+}
+

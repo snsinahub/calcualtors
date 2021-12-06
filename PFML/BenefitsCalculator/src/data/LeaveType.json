@@ -10,7 +10,6 @@
 			"class": "col-large-1",
 	    "weeks": 12,
 	    "id": "birth-adoption",
-	    "startDate": "January 1, 2021",
 	    "theme": "c-primary"
 	}, {
 	    "label": "Personal serious health condition",
@@ -18,7 +17,6 @@
 			"class": "col-large-1",
 	    "weeks": 20,
 	    "id": "own-medical",
-	    "startDate": "January 1, 2021",
 	    "theme": "c-primary"
 	}, {
 	    "label": "Caring for a family member with a serious health condition",
@@ -26,7 +24,6 @@
 			"class": "col-large-1",
 	    "weeks": 12,
 	    "id": "caring-loved-one",
-	    "startDate": "July 1, 2021",
 	    "theme": "c-primary"
 	}, {
 	    "label": "Family member called to active duty in the armed forces",
@@ -34,7 +31,6 @@
 			"class": "col-large-1",
 	    "weeks": 12,
 	    "id": "active-duty",
-	    "startDate": "January 1, 2021",
 	    "theme": "c-primary"
 	}, {
 	    "label": "Caring for a family member who serves in the armed forces",
@@ -42,7 +38,6 @@
 			"class": "col-large-1",
 	    "weeks": 26,
 	    "id": "injured-duty",
-	    "startDate": "January 1, 2021",
 	    "theme": "c-primary"
 	}, {
 	    "label": "Other",
