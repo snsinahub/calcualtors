@@ -92,7 +92,7 @@ export const monthLookup = ({ month, monthValue, options }) => {
     const found = options.find((m) => m.text === month);
     return found.value;
   } if (monthValue) {
-    const found = options.find((m) => m.value === monthValue);
+    const found = options.find((m) => m.value === Number(monthValue));
     return found.text;
   }
   return null;
