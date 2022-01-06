@@ -55,7 +55,7 @@ const DateInput = ({ onSubmit, today }) => {
           options={years.map((y) => ({ text: y, value: y }))}
           required
           stackLabel
-          selected={year}
+          selected={String(year)}
         />
       </div>
     </fieldset>
@@ -67,7 +67,7 @@ DateInput.propTypes = {
   today: PropTypes.shape({
     day: PropTypes.string,
     month: PropTypes.string,
-    year: PropTypes.string
+    year: PropTypes.number
   })
 };
 
