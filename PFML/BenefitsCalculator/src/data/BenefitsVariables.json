@@ -1,6 +1,6 @@
 {
   "title": "Paid Family and Medical Leave Benefits Calculator",
-  "description": "The calculator is provided for estimation purposes only and is not a guarantee of weekly benefits. Actual benefits received may vary depending on factors including the accuracy of income amounts used to calculate the estimate and whether that same income will be used when determining the actual benefit amount for a particular leave.  Other factors include but are not limited to other leaves or benefits you may have used and the start of your benefit year.",
+  "description": "The calculator is provided for estimation purposes only and is not a guarantee of weekly benefits. Actual benefits received may vary depending on factors including the accuracy of income amounts used to calculate the estimate and whether that same income will be used when determining the actual benefit amount for a particular leave.  Other factors include but are not limited to other leaves or benefits you may have used and the start of your benefit year. <a href='https://www.mass.gov/info-details/how-pfml-weekly-benefit-amounts-are-calculated'>Learn more about how we calculate benefits</a>.",
   "buttonLink": {
     "text": "Learn more about PFML benefits",
     "link": "https://www.mass.gov/info-details/paid-family-and-medical-leave-pfml-overview-and-benefits"
