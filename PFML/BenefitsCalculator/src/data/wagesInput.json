@@ -1,6 +1,6 @@
 {
   "inputTitle": {
-    "text":"Enter or estimate your wages from the 4 quarters prior to your leave date.",
+    "text":"Enter or estimate your wages from the 4 quarters prior to your leave date. (If you're a salaried worker, divide your annual wage by 4.)",
     "triggerText": ["your wages from the 4 quarters"],
     "helpText": ["Make sure you enter the total wages that appear on your pay stub <b>before taxes or other deductions</b> have been made. If your leave is in the future, enter estimates. To find your quarterly wage: ","If you're a <b>salaried worker</b>, divide your annual wage by 4. ", "If you’re an <b>hourly worker</b> with a predictable schedule, multiply your hourly wage by the number of hours you work per week, and then multiply that number by 13. For example, someone working full time for minimum wage in Massachusetts will earn $7,020 per quarter: $13.50 per hour x 40 hours per week x 13 weeks = $7,020.","If you <b>had multiple employers</b>, add up the wages you earned from all of your employers in the quarter and enter that number."]
   },

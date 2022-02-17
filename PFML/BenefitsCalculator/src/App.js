@@ -82,7 +82,7 @@ class App extends Component {
     const { helpText, ...helpTipProps } = inputProps.inputTitle;
 
     const getHelpTip = () => (
-      <h2>
+      <h2 style={{ lineHeight: 1 }}>
         <HelpTip {...helpTipProps} {...this.helptipIframeProp} id="helptext-total-wages">
           <div className="ma__help-text">
             {helpText.map((p) => (<Paragraph>{p}</Paragraph>))}

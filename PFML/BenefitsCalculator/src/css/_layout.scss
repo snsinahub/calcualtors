@@ -25,16 +25,16 @@ body {
   // }
 }
 
-h1 {
-  // text-align: center;
-  // margin-top: 2rem;
-}
-
 a {
   color: $c-bay-blue;
   font-weight: 600;
   text-decoration: none;
 }
+
+.ma__page-header__optional-content a {
+  text-decoration: underline;
+}
+
 
 legend,
 label {
