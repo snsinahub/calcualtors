@@ -111,8 +111,8 @@ class LeaveType extends Component {
                       <Button
                         usage="secondary"
                         size="small"
-                        text="Learn more about PFML benefits"
-                        href="https://www.mass.gov/paid-family-and-medical-leave-benefits"
+                        text="Learn more about how we calculate PFML benefits"
+                        href="https://www.mass.gov/info-details/how-pfml-weekly-benefit-amounts-are-calculated"
                       />
                     </Fragment>
                   )}
