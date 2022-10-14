@@ -144,11 +144,6 @@ const mainNav = [
         "href": "https://www.mass.gov/topics/for-educators-administrators",
         "text": "For Educators & Administrators",
         "active": false
-      },
-      {
-        "href": "https://www.mass.gov/topics/professional-training-career-development",
-        "text": "Professional Training & Career Development",
-        "active": false
       }
     ]
   },
