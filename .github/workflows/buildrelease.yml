@@ -1,0 +1,54 @@
+name: buildRelease
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: 'us-east-1'
+
+jobs:
+  pfml-cal-benefits-deploy-dev:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.ref }}
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "10.10.0"
+    - name: restore_cache
+      uses: actions/cache@v3
+      with:
+        key: dependency-cache-{{ checksum "PFML/BenefitsCalculator/package.json" }}
+        restore-keys: dependency-cache-{{ checksum "PFML/BenefitsCalculator/package.json" }}
+        path: "./node_modules"
+    - name: Install global packages
+      run: npm install
+    - name: PFML Benefits Calculator Install Packages
+      run: cd PFML/BenefitsCalculator && npm install
+    - name: PFML Benefits Calculator Deploy Dev App
+      run: |-
+        cd PFML/BenefitsCalculator && npm run build:development
+    - uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: PFML/BenefitsCalculator/build
+    - name: compress  
+      run: |
+        tar -cvzf PFML/BenefitsCalculator/build.tar.gz PFML/BenefitsCalculator/build
+        zip -r PFML/BenefitsCalculator/build.zip PFML/BenefitsCalculator/build
+      continue-on-error: true
+    - name: 'Get semver based on pr label'
+      id: semver
+      uses: "snsinahub-org/semver@v2.2.0"
+      with:
+        type: 'MINOR'
+        prefix: 'v'
+        body: 'PFML BenefitsCalulator: Initial release'
+        create-release: 'yes'
+        files: |
+            PFML/BenefitsCalculator/build.tar.gz
+            PFML/BenefitsCalculator/build.zip
+      continue-on-error: true
+    - name: 'print version'        
+      run: |
+        echo ${{ steps.semver.outputs.version }}
