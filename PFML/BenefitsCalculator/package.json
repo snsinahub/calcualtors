@@ -36,7 +36,7 @@
     "start": "npm-run-all build-menus -p watch-css start-js",
     "build": "npm-run-all build-menus build-css build-js",
     "build-dev-js": "env-cmd -f .env.development react-scripts build",
-    "build:development": "npm-run-all build-menus build-css build-dev-js",
+    "build:development": "env-cmd -f .env.development react-scripts build",
     "build:iframe": "env-cmd .env.iframe npm-run-all build-css build-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
