@@ -85,7 +85,8 @@ jobs:
 #        name: pfml_benefit.zip
     - name: move zip file to root directory
       run: |
-        ls -ltha /tmp/artifacts   
+        pwd
+        tree /tmp/artifacts   
         rsync -rv /tmp/artifacts/*.zip .
         tree .
       continue-on-error: false     
@@ -98,8 +99,8 @@ jobs:
         body: 'PFML BenefitsCalulator: Initial release'
         create-release: 'yes'
         files: |
-            pfml_benefit.zip
-            pfml_contribution.zip
+            /tmp/artifacts/pfml_benefit.zip
+            /tmp/artifacts/pfml_contribution.zip
       continue-on-error: false
     - name: 'print version'        
       run: |
