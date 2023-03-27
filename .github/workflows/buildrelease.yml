@@ -87,7 +87,7 @@ jobs:
       run: |
         pwd
         tree /tmp/artifacts   
-        rsync -rv /tmp/artifacts/*.zip .
+        rsync -zarv --include="*.zip" /tmp/artifacts .
         tree .
       continue-on-error: false     
     - name: 'Get semver based on pr label'
