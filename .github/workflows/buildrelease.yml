@@ -98,6 +98,7 @@ jobs:
         prefix: 'v'
         body: 'PFML BenefitsCalulator: Initial release'
         create-release: 'yes'
+        token: ${{ secrets.MY_PAT }}
         files: |
             pfml_benefit.zip
             pfml_contribution.zip
