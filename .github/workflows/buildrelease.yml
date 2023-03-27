@@ -86,8 +86,8 @@ jobs:
     - name: move zip file to root directory
       run: |
         pwd
-        tree /tmp/artifacts   
-        rsync -zarv --include="*.zip" /tmp/artifacts .
+        tree /tmp/artifacts           
+        for f in $(find tmp/artifacts -name '*.zip'); do cp $f .; done
         tree .
       continue-on-error: false     
     - name: 'Get semver based on pr label'
@@ -99,8 +99,8 @@ jobs:
         body: 'PFML BenefitsCalulator: Initial release'
         create-release: 'yes'
         files: |
-            pfml_benefit/pfml_benefit.zip
-            pfml_contribution/pfml_contribution.zip
+            pfml_benefit.zip
+            pfml_contribution.zip
       continue-on-error: false
     - name: 'print version'        
       run: |
