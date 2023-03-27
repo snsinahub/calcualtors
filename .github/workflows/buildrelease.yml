@@ -36,7 +36,7 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: pfml_benefit.zip
+        name: pfml_benefit
         path: /tmp/artifacts
   pfml-cal-contribution-deploy-dev:
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: pfml_contribution.zip
+        name: pfml_contribution
         path: /tmp/artifacts
   release:
     runs-on: ubuntu-latest
@@ -99,8 +99,8 @@ jobs:
         body: 'PFML BenefitsCalulator: Initial release'
         create-release: 'yes'
         files: |
-            /tmp/artifacts/pfml_benefit.zip
-            /tmp/artifacts/pfml_contribution.zip
+            pfml_benefit/pfml_benefit.zip
+            pfml_contribution/pfml_contribution.zip
       continue-on-error: false
     - name: 'print version'        
       run: |
