@@ -87,7 +87,7 @@ jobs:
       run: |
         pwd
         tree /tmp/artifacts           
-        for f in $(find tmp/artifacts -name '*.zip'); do cp $f .; done
+        for f in $(find /tmp/artifacts -name '*.zip'); do cp $f .; done
         tree .
       continue-on-error: false     
     - name: 'Get semver based on pr label'
